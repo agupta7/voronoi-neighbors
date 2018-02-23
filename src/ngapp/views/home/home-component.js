@@ -21,9 +21,17 @@ var def = {
 					return points;
 				})
 				.then(function (points) {
-					gmapCtrl.drawVoronoi(points, 0.1);
+					gmapCtrl.drawVoronoi(points);
 				});
 		});
+
+		$ctrl.zoomToggle = function (zoom) {
+			if (zoom == 16) {
+				$scope.zoom = 2;
+			} else {
+				$scope.zoom = 16;
+			}
+		};
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {

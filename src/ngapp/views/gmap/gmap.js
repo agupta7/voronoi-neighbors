@@ -21,6 +21,10 @@ function gmapDirective(gmapsApiLoader) {
 						zoom: scope.zoom,
 						center: scope.center
 					});
+
+					scope.$watch('zoom', function (zoom) {
+						map.setZoom(zoom);
+					});
 	
 					googleMaps.event.addListener(map, 'click', function (event) {
 						ctrl.addMarker(event.latLng);
@@ -72,37 +76,28 @@ function gmapController($scope, $window) {
 		});
 		$ctrl.drawVoronoi(points, $scope.voronoi.smoothness);
 	};
-	$ctrl.drawVoronoi = function (points, threshold) {
+	$ctrl.drawVoronoi = function (points) {
 		$ctrl._clearVoronoi();
 		var voronoiEdges = voronoiDiagram(points);
 
 		for (var i = 0; i < voronoiEdges.length; i++) {
 			var edge = voronoiEdges[i];
 
-			var latLngPath = edge.latLngPathSmooth(threshold);
+			var latLngPath = edge.latLngPath();
 			var path = new googleMaps.Polyline({
 				path: latLngPath,
 				strokeColor: '#FF0000',
 				strokeOpacity: 1.0,
-				strokeWeight: 1
+				strokeWeight: 1,
+				geodesic: true
 			});
 
 			$scope.voronoi.centers = points;
-			$scope.voronoi.smoothness = threshold;
 			$scope.gmapData.voronoiEdgePaths.push(path);
 			path.setMap($ctrl._gmap);
 		}
 	};
 
-	/**
-	 * 
-	 * @param {*} threshold - Optional threshold parameter to pass on.
-	 */
-	$ctrl.smoothenVoronoi = function smoothenVoronoi(threshold) {
-		var points = $scope.voronoi.centers;
-		var t = threshold || ($scope.voronoi.smoothness || 2) / 2;
-		$ctrl.drawVoronoi(points, t);
-	};
 	$ctrl._clearVoronoi = function () {
 		for (var i = 0; i < $scope.gmapData.voronoiEdgePaths.length; i++) {
 			$scope.gmapData.voronoiEdgePaths[i].setMap(null);
@@ -112,8 +107,6 @@ function gmapController($scope, $window) {
 	};
 
 }
-
-
 
 function doit() {
 	ngapp.controller(CONTROLLER_NAME, gmapController)
