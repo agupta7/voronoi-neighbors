@@ -1,5 +1,9 @@
 import CartesianPoint from './CartesianPoint.js';
 
+/**
+ * A Voronoi edge is a collection of vertices, which when joined together, forms one of the edges of a Voronoi cell.
+ * @param {*} cartesianPoints An array of CartesianPoint or an array of x, y, z coordinates.
+ */
 function VoronoiEdge(cartesianPoints) {
 	this._points = cartesianPoints.map(function (point) {
 		if (!(point instanceof CartesianPoint)) {
@@ -39,31 +43,27 @@ VoronoiEdge.prototype.latLngPathSmooth = function latLngPath(threshold) {
 	return smoothPoints;
 };
 
-// copied from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
+// copied and refactored from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
 function splitSegment(p0,p1, threshold)
 {
-	var diff = 0.0;
-	for (var ic=0; ic<3; ic++)
-	{
-		var dfc = p1[ic] - p0[ic];
-		diff += dfc*dfc;
-	}
+	var distance = 0.0;
+	p0 = new CartesianPoint(p0);
+	p1 = new CartesianPoint(p1);
+	var p0Latlng = p0.toLatLng();
+	var p1Latlng = p1.toLatLng();
+	
+	distance = p0.distanceTo(p1);
 	var empty = [];
-	if (diff < threshold) return empty;
+	if (distance < threshold) {
+		return empty;
+	}
 	
 	var px = new Array(3);
-	for (var ic=0; ic<3; ic++)
+	for (var ic=0; ic<3; ic++) {
 		px[ic] = p0[ic] + p1[ic];
-	var asqr = 0;
-	for (var ic=0; ic<3; ic++)
-	{
-		var pc = px[ic];
-		asqr += pc*pc;
 	}
-	var normmult = 1/Math.sqrt(asqr);
-	for (var ic=0; ic<3; ic++)
-		px[ic] *= normmult;
-	
+	px = (new CartesianPoint(px)).normalize();
+	var pxLatLng = px.toLatLng();
 	return empty.concat(splitSegment(p0,px, threshold),[px],splitSegment(px,p1, threshold));
 }
 
