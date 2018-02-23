@@ -21,6 +21,10 @@ function gmapDirective(gmapsApiLoader) {
 						zoom: scope.zoom,
 						center: scope.center
 					});
+
+					scope.$watch('zoom', function (zoom) {
+						map.setZoom(zoom);
+					});
 	
 					googleMaps.event.addListener(map, 'click', function (event) {
 						ctrl.addMarker(event.latLng);
