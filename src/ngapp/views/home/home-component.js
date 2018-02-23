@@ -11,12 +11,18 @@ var def = {
 		$scope.$on('gmapInitialized', function (event, gmapCtrl) {
 			$scope.gmapCtrl = gmapCtrl;
 
-			dataService.getPoints().then(function (points) {
-				for (var i = 0; i < points.length; i++) {
-					var point = points[i];
-					gmapCtrl.addMarker(point);
-				}
-			});
+			dataService.getPoints()
+				.then(function (points) {
+					for (var i = 0; i < points.length; i++) {
+						var point = points[i];
+						gmapCtrl.addMarker(point);
+					}
+
+					return points;
+				})
+				.then(function (points) {
+					gmapCtrl.drawVoronoi(points, 0.1);
+				});
 		});
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
