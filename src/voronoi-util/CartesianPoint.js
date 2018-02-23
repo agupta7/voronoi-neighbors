@@ -28,7 +28,7 @@ CartesianPoint.prototype.toArray = function toArray() {
 
 CartesianPoint.prototype.normalize = function normalize() {
 	var squares = this.toArray().map(function (coord) {
-		return coord ** 2;
+		return Math.pow(coord, 2);
 	});
 	var distance = Math.sqrt(squares.reduce(function (prev, current) {
 		return prev + current;
@@ -47,7 +47,7 @@ CartesianPoint.prototype.toLatLng = function toLatLng() {
 	var lat = 90 - CartesianPoint._radiansToDegrees(polar);
 	
 	// http://www.geomidpoint.com/example.html
-	var hypotenuse = Math.sqrt(this.x ** 2 + this.y ** 2);
+	var hypotenuse = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
 	//var lat = CartesianPoint._radiansToDegrees(Math.atan2(this.z, hypotenuse));
 	
 	var azimuthal = Math.atan2(this.y, this.x);
