@@ -21,6 +21,7 @@ VoronoiEdge.prototype.latLngPath = function latLngPath() {
 
 // Code adapted from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
 // function Add_GMapLine(...)
+// not needed if using geodesic: true property in Google Maps polyline constructor.
 VoronoiEdge.prototype.latLngPathSmooth = function latLngPath(threshold) {
 	if (!threshold || this._points.length < 2) {
 		return this.latLngPath();
@@ -41,23 +42,23 @@ VoronoiEdge.prototype.latLngPathSmooth = function latLngPath(threshold) {
 		smoothPoints[i] = (new CartesianPoint(smoothPoints[i])).toLatLng();
 	}
 	return smoothPoints;
-};
 
-// copied and refactored from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
-function splitSegment(p0, p1, threshold) {
-	p0 = new CartesianPoint(p0);
-	p1 = new CartesianPoint(p1);
-	
-	var distance = p0.distanceTo(p1);
-	var empty = [];
-	if (distance < threshold) {
-		return empty;
+	// copied and refactored from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
+	function splitSegment(p0, p1, threshold) {
+		p0 = new CartesianPoint(p0);
+		p1 = new CartesianPoint(p1);
+		
+		var distance = p0.distanceTo(p1);
+		var empty = [];
+		if (distance < threshold) {
+			return empty;
+		}
+		
+		var px = new CartesianPoint(p0.x + p1.x, p0.y + p1.y, p0.z + p1.z);
+		px = px.normalize();
+
+		return empty.concat(splitSegment(p0, px, threshold), px, splitSegment(px, p1, threshold));
 	}
-	
-	var px = new CartesianPoint(p0.x + p1.x, p0.y + p1.y, p0.z + p1.z);
-	px = px.normalize();
-
-	return empty.concat(splitSegment(p0, px, threshold), px, splitSegment(px, p1, threshold));
-}
+};
 
 export default VoronoiEdge;
