@@ -44,27 +44,20 @@ VoronoiEdge.prototype.latLngPathSmooth = function latLngPath(threshold) {
 };
 
 // copied and refactored from http://lpetrich.org/Science/GeometryDemo/GeometryDemo_GMap.html
-function splitSegment(p0,p1, threshold)
-{
-	var distance = 0.0;
+function splitSegment(p0, p1, threshold) {
 	p0 = new CartesianPoint(p0);
 	p1 = new CartesianPoint(p1);
-	var p0Latlng = p0.toLatLng();
-	var p1Latlng = p1.toLatLng();
 	
-	distance = p0.distanceTo(p1);
+	var distance = p0.distanceTo(p1);
 	var empty = [];
 	if (distance < threshold) {
 		return empty;
 	}
 	
-	var px = new Array(3);
-	for (var ic=0; ic<3; ic++) {
-		px[ic] = p0[ic] + p1[ic];
-	}
-	px = (new CartesianPoint(px)).normalize();
-	var pxLatLng = px.toLatLng();
-	return empty.concat(splitSegment(p0,px, threshold),[px],splitSegment(px,p1, threshold));
+	var px = new CartesianPoint(p0.x + p1.x, p0.y + p1.y, p0.z + p1.z);
+	px = px.normalize();
+
+	return empty.concat(splitSegment(p0, px, threshold), px, splitSegment(px, p1, threshold));
 }
 
 export default VoronoiEdge;

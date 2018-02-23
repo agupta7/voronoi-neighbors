@@ -117,8 +117,6 @@ function gmapController($scope, $window) {
 
 }
 
-
-
 function doit() {
 	ngapp.controller(CONTROLLER_NAME, gmapController)
 	ngapp._directive(DIRECTIVE_NAME, gmapDirective);

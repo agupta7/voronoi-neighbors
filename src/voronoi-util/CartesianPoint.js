@@ -32,11 +32,11 @@ CartesianPoint.prototype.normalize = function normalize() {
 		return this;
 	}
 
-	var normalized = this.toArray().map(function (coord) {
-		return coord / magnitude;
-	});
+	this.x = this[0] = this.x / magnitude;
+	this.y = this[1] /= magnitude;
+	this.z = this[2] /= magnitude;
 
-	return new CartesianPoint(normalized);
+	return this;
 };
 
 CartesianPoint.prototype.distanceTo = function distanceTo(cartesianPoint) {
