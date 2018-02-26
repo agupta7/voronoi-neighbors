@@ -27,9 +27,24 @@ function gmapDirective(gmapsApiLoader) {
 					});
 	
 					googleMaps.event.addListener(map, 'click', function (event) {
-						ctrl.addMarker(event.latLng);
+						ctrl.addMarker({'lat': event.latLng.lat(), 'lng': event.latLng.lng()});
+						ctrl.drawVoronoi(scope.gmapData.markers.map(function (marker) {
+							return marker._latlng;
+						}));
 					});
-	
+
+					googleMaps.event.addListener(map, 'mousemove', function (event) {
+						var latlng = {
+							'lat': event.latLng.lat(),
+							'lng': event.latLng.lng()
+						};
+						ctrl._highlightVoronoiCells(latlng);
+					});
+
+					googleMaps.event.addListener(map, 'mouseout', function (event) {
+						ctrl._clearVoronoiHighlight();
+					});
+
 					ctrl.mapInitialized(googleMaps, map);
 				});
 			}
@@ -46,12 +61,13 @@ function gmapController($scope, $window) {
 	$ctrl._gmap; // this is the Map that is eventually instantiated in the link function
 
 	$scope.gmapData = {
-		markers: [],
-		voronoiEdgePaths: []
+		'markers': [],
+		'voronoiEdgePaths': [],
+		'voronoiHoverPaths': []
 	};
 	$scope.voronoi = {
-		centers: [],
-		smoothness: null
+		'centers': [],
+		'diagram': null
 	};
 	
 	$ctrl.mapInitialized = function (gmaps, mapInstance) {
@@ -64,21 +80,17 @@ function gmapController($scope, $window) {
 			position: latlng,
 			map: $ctrl._gmap
 		});
+		marker._latlng = latlng;
 
 		$scope.gmapData.markers.push(marker);
-
-		// re-calculate voronoi with new marker
-		var points = $scope.gmapData.markers.map(function (marker) {
-			return {
-				lat: marker.position.lat(),
-				lng: marker.position.lng()
-			};
-		});
-		$ctrl.drawVoronoi(points, $scope.voronoi.smoothness);
 	};
 	$ctrl.drawVoronoi = function (points) {
 		$ctrl._clearVoronoi();
-		var voronoiEdges = voronoiDiagram(points);
+		var diagram = voronoiDiagram(points);
+		var neighbors = diagram.cells[0].getNeighbors();
+		var voronoiEdges = diagram.edges;
+		$scope.voronoi.centers = points;
+		$scope.voronoi.diagram = diagram;
 
 		for (var i = 0; i < voronoiEdges.length; i++) {
 			var edge = voronoiEdges[i];
@@ -92,17 +104,60 @@ function gmapController($scope, $window) {
 				geodesic: true
 			});
 
-			$scope.voronoi.centers = points;
 			$scope.gmapData.voronoiEdgePaths.push(path);
 			path.setMap($ctrl._gmap);
 		}
 	};
+	$ctrl._highlightVoronoiCells = function _highlightVoronoiCells(latlng) {
+		var diagram = $scope.voronoi.diagram;
+		if (!diagram) return;
+
+		$ctrl._clearVoronoiHighlight();
+		var path;
+
+		var ownerCell = diagram.cells.getClosest(latlng);
+		var neighbors = ownerCell.getNeighbors();
+		for (var i = 0; i < neighbors.length; i++) {
+			var neigh = neighbors[i];
+			path = new googleMaps.Polyline({
+				path: neigh.cellBoundary.map(function (point) {
+					return point.toLatLng();
+				}),
+				strokeColor: '#0000ff',
+				strokeOpacity: 1.0,
+				strokeWeight: 2,
+				geodesic: true
+			});
+			path.setMap($ctrl._gmap);
+			$scope.gmapData.voronoiHoverPaths.push(path);
+		}
+
+		path = new googleMaps.Polyline({
+			path: ownerCell.cellBoundary.map(function (point) {
+				return point.toLatLng();
+			}),
+			strokeColor: '#000000',
+			strokeOpacity: 1.0,
+			strokeWeight: 3,
+			geodesic: true
+		});
+		path.setMap($ctrl._gmap);
+		$scope.gmapData.voronoiHoverPaths.push(path);
+	};
+	$ctrl._clearVoronoiHighlight = function _clearVoronoiHighlight() {
+		var path;
+		while (path = $scope.gmapData.voronoiHoverPaths.pop()) {
+			path.setMap(null);
+		}
+	};
 
 	$ctrl._clearVoronoi = function () {
+		$ctrl._clearVoronoiHighlight();
 		for (var i = 0; i < $scope.gmapData.voronoiEdgePaths.length; i++) {
 			$scope.gmapData.voronoiEdgePaths[i].setMap(null);
 		}
 		$scope.voronoi.centers = [];
+		$scope.voronoi.diagram = null;
 		$scope.gmapData.voronoiEdgePaths = [];
 	};
 

@@ -27,7 +27,8 @@ CartesianPoint.prototype.toArray = function toArray() {
 };
 
 CartesianPoint.prototype.normalize = function normalize() {
-	var magnitude = this.distanceTo([0, 0, 0]);
+	var sum = Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2);
+	var magnitude = Math.sqrt(sum);
 	if (magnitude == 0) {
 		return this;
 	}
