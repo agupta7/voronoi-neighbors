@@ -27,18 +27,25 @@ CartesianPoint.prototype.toArray = function toArray() {
 };
 
 CartesianPoint.prototype.normalize = function normalize() {
-	var squares = this.toArray().map(function (coord) {
-		return Math.pow(coord, 2);
-	});
-	var distance = Math.sqrt(squares.reduce(function (prev, current) {
-		return prev + current;
-	}));
+	var sum = Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2);
+	var magnitude = Math.sqrt(sum);
+	if (magnitude == 0) {
+		return this;
+	}
 
-	var normalized = this.toArray().map(function (coord) {
-		return coord / distance;
-	});
+	this.x = this[0] = this.x / magnitude;
+	this.y = this[1] /= magnitude;
+	this.z = this[2] /= magnitude;
 
-	return new CartesianPoint(normalized[0], normalized[1], normalized[2]);
+	return this;
+};
+
+CartesianPoint.prototype.distanceTo = function distanceTo(cartesianPoint) {
+	var sum = Math.pow(this.x - cartesianPoint[0], 2);
+	sum += Math.pow(this.y - cartesianPoint[1], 2);
+	sum += Math.pow(this.z - cartesianPoint[2], 2);
+	
+	return Math.sqrt(sum)
 };
 
 CartesianPoint.prototype.toLatLng = function toLatLng() {
