@@ -1,0 +1,34 @@
+CREATE TABLE POIs (id integer, name varchar, location geometry);
+
+ALTER TABLE "pois"
+ADD CONSTRAINT "pois_id" PRIMARY KEY ("id");
+
+CREATE INDEX idx_poi_locations ON POIs using gist(location);
+
+INSERT INTO POIs VALUES (
+	101, 
+	'Chipotle Mexican Grill', 
+	ST_SetSRID(ST_MakePoint(-85.48733353614807, 32.606736094972966), 4326)
+);
+
+INSERT INTO POIs VALUES (
+	102, 
+	'Chick-fil-A', 
+	--ST_GeometryFromText('POINT(32.60682647346745 -85.48646450042725)', 4326)
+	ST_SetSRID(ST_MakePoint(-85.48646450042725, 32.60682647346745), 4326)
+);
+INSERT INTO POIs VALUES (
+	103, 
+	'McDonald''s', 
+	ST_SetSRID(ST_MakePoint(-85.48385739326477, 32.6070885705858), 4326)
+);
+INSERT INTO POIs VALUES (
+	104, 
+	'Skybar Cafe', 
+	ST_SetSRID(ST_MakePoint(-85.48277378082275, 32.606690905691494), 4326)
+);
+INSERT INTO POIs VALUES (
+	105, 
+	'Little Italy Pizzeria', 
+	ST_SetSRID(ST_MakePoint(-85.48094987869263, 32.60670898140683), 4326)
+);

@@ -9,14 +9,14 @@
 				<thead>
 					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
 					<th>Cartesian</th>
-					<th>Normalized</th>
+					<th>distanceTo</th>
 					<th> </th>
 				</thead>
 				<tbody>
 					<tr ng-repeat="point in points">
 						<td>{{point.lat}}, {{point.lng}}</td>
 						<td>{{CartesianPoint.fromLatLng(point)}}</td>
-						<td>{{CartesianPoint.fromLatLng(point).normalize()}}</td>
+						<td><input type="text" ng-model="x"><input type="text" ng-model="y"><input type="text" ng-model="z">{{CartesianPoint.fromLatLng(point).distanceTo([x, y, z])}}</td>
 						<td><button ng-click="POIs.push(point)">Add point</button></td>
 					</tr>
 				</tbody>

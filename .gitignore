@@ -1,6 +1,7 @@
 node_modules
 dist
-/debug
+debug
+*.pyc
 
 # Logs
 logs
