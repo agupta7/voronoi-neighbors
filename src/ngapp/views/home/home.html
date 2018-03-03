@@ -1,5 +1,19 @@
 <div ng-init="zoom=16">
 	<!-- <p><a href="/ondemand">Go to page 2</a></p> -->
-	Click on the map to add more points! <button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button>
-	<gmap zoom="zoom" center="AUBURN_DOWNTOWN" style="display: block; height: 600px;"></gmap>
+	Click on the map to add more points! 
+	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button>
+	<button type="button" ng-click="$ctrl.loadData()">Plot restaurants</button>
+	
+	<gmap zoom="zoom" center="AUBURN_DOWNTOWN" markers="POIs" options="{'markersEditor': true, 'autoVoronoi': true}" style="display: block; height: 600px;"></gmap>
+
+	<table>
+		<thead>
+			<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="point in POIs">
+				<td ng-bind="">{{point.lat}}, {{point.lng}}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

@@ -93,13 +93,13 @@ function _getClosestCell(latLng) {
 	var neighborhood = this;
 	var point = CartesianPoint.fromLatLng(latLng);
 
-	var closestCell = this[0];
-	var shortest = point.distanceTo(CartesianPoint.fromLatLng(this[0].owner));
+	var closestCell = null;
+	var shortest = null;
 
-	for (var i = 1; i < neighborhood.length; i++) {
+	for (var i = 0; i < neighborhood.length; i++) {
 		var cell = neighborhood[i];
 		var d = point.distanceTo(CartesianPoint.fromLatLng(cell.owner));
-		if (d < shortest) {
+		if (shortest == null || d < shortest) {
 			closestCell = cell;
 			shortest = d;
 		}

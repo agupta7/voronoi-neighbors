@@ -4,26 +4,9 @@ import dataService from '../../services/data.js';
 const COMPONENT_NAME = 'homeComponent';
 
 var def = {
-	controller: ['$scope', '$window', dataService, function ($scope, $window, dataService) {
+	controller: ['$scope', '$q', dataService, function ($scope, $q, dataService) {
 		var $ctrl = this;
 		$scope.AUBURN_DOWNTOWN = {lat: 32.608357, lng: -85.481163};
-
-		$scope.$on('gmapInitialized', function (event, gmapCtrl) {
-			$scope.gmapCtrl = gmapCtrl;
-
-			dataService.getPoints()
-				.then(function (points) {
-					for (var i = 0; i < points.length; i++) {
-						var point = points[i];
-						gmapCtrl.addMarker(point);
-					}
-
-					return points;
-				})
-				.then(function (points) {
-					gmapCtrl.drawVoronoi(points);
-				});
-		});
 
 		$ctrl.zoomToggle = function (zoom) {
 			if (zoom == 16) {
@@ -32,6 +15,16 @@ var def = {
 				$scope.zoom = 16;
 			}
 		};
+		$ctrl.loadData - function loadData() {
+			$q.all([dataService.getPoints()]).then(function (resolves) {
+				//var gmapCtrl = resolves[0];
+				var points = resolves[0];
+	
+				//$scope['gmapCtrl'] = gmapCtrl;
+				$scope['POIs'] = points;
+			});
+		};
+		
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {

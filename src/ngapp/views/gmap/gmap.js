@@ -1,5 +1,6 @@
 import ngapp from '../../ngappmodule.js';
 import voronoiDiagram from '../../../voronoi-util/voronoi.js';
+import debounce from '../../services/debounce.js';
 
 const DIRECTIVE_NAME = 'gmap';
 const CONTROLLER_NAME = DIRECTIVE_NAME + 'Controller';
@@ -13,7 +14,9 @@ function gmapDirective(gmapsApiLoader) {
 			require: DIRECTIVE_NAME,
 			scope: {
 				'zoom': '=',
-				'center': '='
+				'center': '=',
+				'markers': '=',
+				'options': '='
 			},
 			link: function (scope, element, attrs, ctrl) {
 				gmapsApiLoader.then(function (googleMaps) {
@@ -25,12 +28,22 @@ function gmapDirective(gmapsApiLoader) {
 					scope.$watch('zoom', function (zoom) {
 						map.setZoom(zoom);
 					});
-	
-					googleMaps.event.addListener(map, 'click', function (event) {
-						ctrl.addMarker({'lat': event.latLng.lat(), 'lng': event.latLng.lng()});
-						ctrl.drawVoronoi(scope.gmapData.markers.map(function (marker) {
-							return marker._latlng;
-						}));
+
+					var clickListener = null;
+					scope.$watch('options.markersEditor', function (isEditor) {
+						if (!isEditor) {
+							if (clickListener) {
+								googleMaps.event.removeListener(clickListener);
+								clickListener = null;
+							}
+							return;
+						}
+						clickListener = googleMaps.event.addListener(map, 'click', function (event) {
+							ctrl.addMarker({'lat': event.latLng.lat(), 'lng': event.latLng.lng()});
+							ctrl.drawVoronoi(scope.gmapData.markers.map(function (marker) {
+								return marker._latlng;
+							}));
+						});
 					});
 
 					googleMaps.event.addListener(map, 'mousemove', function (event) {
@@ -53,8 +66,8 @@ function gmapDirective(gmapsApiLoader) {
 	return ddo;
 }
 
-gmapController.$inject = ['$scope', '$window'];
-function gmapController($scope, $window) {
+gmapController.$inject = ['$scope', '$window', debounce];
+function gmapController($scope, $window, debounce) {
 	var $ctrl = this;
 	
 	var googleMaps;
@@ -74,20 +87,42 @@ function gmapController($scope, $window) {
 		$ctrl._gmap = mapInstance;
 		googleMaps = gmaps;
 		$scope.$emit('gmapInitialized', $ctrl);
+
+		$scope.$watchCollection('markers', function (markers) {
+			for (var i = 0; i < markers.length; i++) {
+				var marker = markers[i];
+				if (!marker._gmapAdded) {
+					$ctrl.addMarker(marker, true);
+				}
+			}
+		});
 	};
-	$ctrl.addMarker = function (latlng) {
+	$ctrl.addMarker = function (latlng, alreadyAddedToMarkers) {
 		var marker = new googleMaps.Marker({
 			position: latlng,
 			map: $ctrl._gmap
 		});
 		marker._latlng = latlng;
+		latlng._gmapAdded = true;
 
 		$scope.gmapData.markers.push(marker);
+		
+		// housekeeping
+		if (!alreadyAddedToMarkers) {
+			$scope['markers'].push(latlng);
+		}
+		if ($scope.$eval('options.autoVoronoi')) {
+			debounce($ctrl.drawVoronoi, 100);
+		}
 	};
 	$ctrl.drawVoronoi = function (points) {
+		if (!points) {
+			points = $scope.gmapData.markers.map(function (marker) {
+				return marker._latlng;
+			});
+		}
 		$ctrl._clearVoronoi();
 		var diagram = voronoiDiagram(points);
-		var neighbors = diagram.cells[0].getNeighbors();
 		var voronoiEdges = diagram.edges;
 		$scope.voronoi.centers = points;
 		$scope.voronoi.diagram = diagram;
@@ -110,7 +145,7 @@ function gmapController($scope, $window) {
 	};
 	$ctrl._highlightVoronoiCells = function _highlightVoronoiCells(latlng) {
 		var diagram = $scope.voronoi.diagram;
-		if (!diagram) return;
+		if (!diagram || !diagram.cells.length) return;
 
 		$ctrl._clearVoronoiHighlight();
 		var path;
