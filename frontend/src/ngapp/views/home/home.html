@@ -1,0 +1,30 @@
+<div ng-init="zoom=16">
+	<!-- <p><a href="/ondemand">Go to page 2</a></p> -->
+	Click on the map to add more points! 
+	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button>
+	<button ng-init="POIs = []" ng-click="POIs = POIs.concat(points)">Add all markers</button>
+	<section>	
+		<div style="width: 50%; float:left;">
+			<table class="bordered">
+				<thead>
+					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+					<th>Cartesian</th>
+					<th>Normalized</th>
+					<th> </th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="point in points">
+						<td>{{point.lat}}, {{point.lng}}</td>
+						<td>{{CartesianPoint.fromLatLng(point)}}</td>
+						<td>{{CartesianPoint.fromLatLng(point).normalize()}}</td>
+						<td><button ng-click="POIs.push(point)">Add point</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div style="width: 50%; float: left;">
+			<gmap zoom="zoom" center="AUBURN_DOWNTOWN" markers="POIs" options="{'markersEditor': true, 'autoVoronoi': true}" style="display: block; height: 600px;"></gmap>
+		</div>
+		<div style="clear: both;"></div>
+	</section>
+</div>

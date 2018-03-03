@@ -1,5 +1,6 @@
 import ngapp from '../../ngappmodule.js';
 import dataService from '../../services/data.js';
+import CartesianPoint from '../../../voronoi-util/CartesianPoint.js';
 
 const COMPONENT_NAME = 'homeComponent';
 
@@ -7,6 +8,15 @@ var def = {
 	controller: ['$scope', '$q', dataService, function ($scope, $q, dataService) {
 		var $ctrl = this;
 		$scope.AUBURN_DOWNTOWN = {lat: 32.608357, lng: -85.481163};
+		$scope['CartesianPoint'] = CartesianPoint;
+
+		$q.all([dataService.getPoints()]).then(function (resolves) {
+			//var gmapCtrl = resolves[0];
+			var points = resolves[0];
+
+			//$scope['gmapCtrl'] = gmapCtrl;
+			$scope['points'] = points;
+		});
 
 		$ctrl.zoomToggle = function (zoom) {
 			if (zoom == 16) {
@@ -14,15 +24,6 @@ var def = {
 			} else {
 				$scope.zoom = 16;
 			}
-		};
-		$ctrl.loadData - function loadData() {
-			$q.all([dataService.getPoints()]).then(function (resolves) {
-				//var gmapCtrl = resolves[0];
-				var points = resolves[0];
-	
-				//$scope['gmapCtrl'] = gmapCtrl;
-				$scope['POIs'] = points;
-			});
 		};
 		
 	}],

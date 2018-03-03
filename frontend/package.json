@@ -1,7 +1,7 @@
 {
-  "name": "angular-webpack-boilerplate",
+  "name": "Voronoi frontend",
   "version": "0.1.0",
-  "description": "A boilerplate project for AngularJS 1.x based websites (SPA) using webpack to manage workflow.",
+  "description": "The frontend to the k nearest neighbors project based on Voronoi cells.",
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

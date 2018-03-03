@@ -40,9 +40,6 @@ function gmapDirective(gmapsApiLoader) {
 						}
 						clickListener = googleMaps.event.addListener(map, 'click', function (event) {
 							ctrl.addMarker({'lat': event.latLng.lat(), 'lng': event.latLng.lng()});
-							ctrl.drawVoronoi(scope.gmapData.markers.map(function (marker) {
-								return marker._latlng;
-							}));
 						});
 					});
 

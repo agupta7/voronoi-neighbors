@@ -62,6 +62,9 @@ CartesianPoint.prototype.toLatLng = function toLatLng() {
 
 	return {'lat': lat, 'lng': lng};
 };
+CartesianPoint.prototype.toString = function toString() {
+	return '(' + this.x + ', ' + this.y + ', ' + this.z + ')';
+}
 
 CartesianPoint.fromLatLng = function fromLatLng(latLng) {
 	const radius = 6371; // kilometers
