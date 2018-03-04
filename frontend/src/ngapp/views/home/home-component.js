@@ -12,10 +12,14 @@ var def = {
 
 		$q.all([dataService.getPoints()]).then(function (resolves) {
 			//var gmapCtrl = resolves[0];
-			var points = resolves[0];
+			var points = resolves[0].map(function (point) {
+				point.lat = point.location.lat;
+				point.lng = point.location.lng;
+				return point;
+			});
 
 			//$scope['gmapCtrl'] = gmapCtrl;
-			$scope['points'] = points;
+			$scope['POIs'] = ($scope['POIs'] || []).concat(points);
 		});
 
 		$ctrl.zoomToggle = function (zoom) {
@@ -25,7 +29,6 @@ var def = {
 				$scope.zoom = 16;
 			}
 		};
-		
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {

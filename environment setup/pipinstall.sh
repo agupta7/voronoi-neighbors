@@ -1,3 +1,4 @@
-pip install flask
-pip install psycopg2
-pip install shapely
+#!/bin/bash
+pip install --user flask
+pip install --user psycopg2
+pip install --user shapely

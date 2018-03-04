@@ -1,14 +1,17 @@
 from flask import Flask
 from flask import Response
+from flask import Request
 import knn
 import json
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
+@app.route('/pois', methods=['GET'])
 def allPOIs():
 	records = knn.allPois()
-	return Response(json.dumps(records), mimetype='application/json')
+	response = Response(json.dumps(records), mimetype='application/json')
+	response.headers['Access-Control-Allow-Origin'] = '*'
+	return response
 
 
 if __name__ == '__main__':

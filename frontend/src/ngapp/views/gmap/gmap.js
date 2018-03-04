@@ -85,11 +85,24 @@ function gmapController($scope, $window, debounce) {
 		googleMaps = gmaps;
 		$scope.$emit('gmapInitialized', $ctrl);
 
-		$scope.$watchCollection('markers', function (markers) {
-			for (var i = 0; i < markers.length; i++) {
-				var marker = markers[i];
-				if (!marker._gmapAdded) {
-					$ctrl.addMarker(marker, true);
+		$scope.$watchCollection('markers', function (latLngs) {
+			if (!latLngs) {
+				for (i = 0; i < $scope.gmapData.markers.length; i++) {
+					var marker = $scope.gmapData.markers[i];
+					$ctrl.removeMarker(marker._latlng, true);
+				}
+				return;
+			}
+			for (var i = 0; i < latLngs.length; i++) {
+				var latLng = latLngs[i];
+				if (!latLng._gmapAdded) {
+					$ctrl.addMarker(latLng, true);
+				}
+			}
+			for (i = 0; i < $scope.gmapData.markers.length; i++) {
+				var marker = $scope.gmapData.markers[i];
+				if (latLngs.indexOf(marker._latlng) < 0) {
+					$ctrl.removeMarker(marker._latlng, true);
 				}
 			}
 		});
@@ -108,6 +121,24 @@ function gmapController($scope, $window, debounce) {
 		if (!alreadyAddedToMarkers) {
 			$scope['markers'].push(latlng);
 		}
+		if ($scope.$eval('options.autoVoronoi')) {
+			debounce($ctrl.drawVoronoi, 100);
+		}
+	};
+	$ctrl.removeMarker = function (latlng, alreadyRemovedFromMarkers) {
+		for (var i = 0; i < $scope.gmapData.markers.length; i++) {
+			var marker = $scope.gmapData.markers[i];
+			if (latlng == marker._latlng) {
+				marker.setMap(null);
+				$scope.gmapData.markers.splice(i--, 1);
+			}
+		}
+		
+		var ind = $scope['markers'].indexOf(latlng);
+		if (ind > 0) {
+			$scope['markers'].splice(ind, 1);
+		}
+
 		if ($scope.$eval('options.autoVoronoi')) {
 			debounce($ctrl.drawVoronoi, 100);
 		}

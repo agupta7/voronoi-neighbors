@@ -13,4 +13,12 @@ function debounce(f, milliseconds, timeoutService, canceller) {
 	}, milliseconds);
 }
 
+function asyncPromise(resolveData, $q, $timeout) {
+	return $q(function (resolver, rejector) {
+		$timeout(function () {
+			resolver(resolveData);
+		}, 10);
+	});
+}
+
 export default debounce;

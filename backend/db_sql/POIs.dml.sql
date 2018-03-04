@@ -1,9 +1,4 @@
-CREATE TABLE POIs (id integer, name varchar, location geometry);
-
-ALTER TABLE "pois"
-ADD CONSTRAINT "pois_id" PRIMARY KEY ("id");
-
-CREATE INDEX idx_poi_locations ON POIs using gist(location);
+TRUNCATE TABLE POIs;
 
 INSERT INTO POIs VALUES (
 	101, 
@@ -31,4 +26,29 @@ INSERT INTO POIs VALUES (
 	105, 
 	'Little Italy Pizzeria', 
 	ST_SetSRID(ST_MakePoint(-85.48094987869263, 32.60670898140683), 4326)
+);
+INSERT INTO POIs VALUES (
+	106, 
+	'Mellow Mushroom', 
+	ST_SetSRID(ST_MakePoint(-85.4815399646759, 32.60736422362415), 4326)
+);
+INSERT INTO POIs VALUES (
+	107, 
+	'Waffle House', 
+	ST_SetSRID(ST_MakePoint(-85.4826557636261, 32.609293771138134), 4326)
+);
+INSERT INTO POIs VALUES (
+	108, 
+	'Hamilton''s On Magnolia', 
+	ST_SetSRID(ST_MakePoint(-85.4800432920456, 32.606315833775504), 4326)
+);
+INSERT INTO POIs VALUES (
+	109, 
+	'Panda Express', 
+	ST_SetSRID(ST_MakePoint(-85.48516094684601, 32.6048833157383), 4326)
+);
+INSERT INTO POIs VALUES (
+	110, 
+	'Starbucks', 
+	ST_SetSRID(ST_MakePoint(-85.48657178878784, 32.602461088011616), 4326)
 );
