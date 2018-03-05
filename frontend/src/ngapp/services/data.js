@@ -2,22 +2,18 @@ import ngapp from '../ngappmodule.js';
 
 const SERVICE_NAME = 'data';
 
-dataService.$inject = ['$http', '$q', '$timeout'];
+dataService.$inject = ['$http', '$location', 'API_URL_BASE'];
 ngapp._service(SERVICE_NAME, dataService);
 
-function dataService($http, $q, $timeout) {
+function dataService($http, $location, API_URL_BASE) {
 	var service = this;
 
 	service.getPoints = function getPoints() {
-		return asyncPromise(POINTS);
+		return $http.get(API_URL_BASE + '/pois').then(dataGetter);
 	};
 
-	function asyncPromise(resolveData) {
-		return $q(function (resolver, rejector) {
-			$timeout(function () {
-				resolver(resolveData);
-			}, 10);
-		});
+	function dataGetter(httpResponse) {
+		return httpResponse.data;
 	}
 }
 

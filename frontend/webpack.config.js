@@ -26,6 +26,7 @@ module.exports = function (env) { // webpack will invoke the exported function w
 	var ENV = process.env.npm_lifecycle_event; // 
 	var isTest = env.test == true;
 	var isProd = env.production == true;
+	var isDebug = env.debug == true;
 	var disableSourceMap = false;
 
 	return makeWebpackConfig();
@@ -49,7 +50,9 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			module: {
 				rules: []
 			},
-			plugins: [],
+			plugins: [new webpack.DefinePlugin({
+				'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend']))
+			})],
 			devtool: 'inline-source-map',
 			devServer: {
 				host: '0.0.0.0', // comment this out to listen on only localhost

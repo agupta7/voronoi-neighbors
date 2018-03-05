@@ -1,6 +1,13 @@
-/node_modules
-/dist
-/debug
+# IDEs
+/.vscode
+
+# npm
+node_modules
+dist
+debug
+
+# pthon
+*.pyc
 
 # Logs
 logs

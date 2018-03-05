@@ -51,19 +51,23 @@ CartesianPoint.prototype.distanceTo = function distanceTo(cartesianPoint) {
 CartesianPoint.prototype.toLatLng = function toLatLng() {
 	// https://vvvv.org/blog/polar-spherical-and-geographic-coordinates
 	var polar = Math.acos(this.z);
-	var lat = 90 - CartesianPoint._radiansToDegrees(polar);
+	//var lat = 90 - CartesianPoint._radiansToDegrees(polar);
 	
 	// http://www.geomidpoint.com/example.html
 	var hypotenuse = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-	//var lat = CartesianPoint._radiansToDegrees(Math.atan2(this.z, hypotenuse));
+	var lat = CartesianPoint._radiansToDegrees(Math.atan2(this.z, hypotenuse));
 	
 	var azimuthal = Math.atan2(this.y, this.x);
 	var lng = CartesianPoint._radiansToDegrees(azimuthal);
 
 	return {'lat': lat, 'lng': lng};
 };
+CartesianPoint.prototype.toString = function toString() {
+	return '(' + this.x + ', ' + this.y + ', ' + this.z + ')';
+}
 
 CartesianPoint.fromLatLng = function fromLatLng(latLng) {
+	const radius = 6371; // kilometers
 	var radians = CartesianPoint._latLngToRadians(latLng);
 
 	// https://vvvv.org/blog/polar-spherical-and-geographic-coordinates
@@ -71,7 +75,7 @@ CartesianPoint.fromLatLng = function fromLatLng(latLng) {
 	var y = Math.cos(radians.polarComplement) * Math.sin(radians.azimuthal);
 	var z = Math.sin(radians.polarComplement);
 
-	return new CartesianPoint(x, y, z);
+	return new CartesianPoint(radius * x, radius * y, radius * z);
 };
 
 CartesianPoint._latLngToRadians = function _latLngToRadians(latLng) {
