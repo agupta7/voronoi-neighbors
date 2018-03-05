@@ -1,8 +1,8 @@
 <div ng-init="zoom=16">
 	<!-- <p><a href="/ondemand">Go to page 2</a></p> -->
-	Click on the map to add more points! 
+	Click on the map to add more points!
 	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button>
-	<section>	
+	<section>
 		<div ng-show="POIs.length">
 			<table class="bordered">
 				<thead>
