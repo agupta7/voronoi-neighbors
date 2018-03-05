@@ -11,6 +11,9 @@ import './styles/reset.css';
 import './styles/app.css';
 
 import ngapp from './ngapp/ngappmodule.js';
+// from DefinePlugin in webpack.config.json)
+ngapp._value('API_URL_BASE', __WEBPACK__API_URL_BASE); 
+
 import {delayCompileDirective}  from './ngapp/ngroute-definitions.js';
 
 import gmap from './ngapp/views/gmap/gmap.js';

@@ -11,6 +11,7 @@
  */
 
 var express = require("express");
+var httpProxy = require('http-proxy');
 var app = express();
 // var bodyparser = require("body-parser");
 var path = require("path");
@@ -21,8 +22,15 @@ var port = parseInt(package_json.ports[process.argv[2]]);
 
 app.use(express.static(path.join(__dirname, process.argv[2])));
 app.use(require("compression")()); // TODO : doesn't yet work
+var apiProxy = httpProxy.createProxyServer();
+app.all("/api/*", function (req, res) {
+	req.url = req.url.replace(/^\/api/, '');
+	apiProxy.web(req, res, {
+		target: 'http://localhost:' + package_json['ports']['backend']
+	});
+});
 app.get(/\// /*anything that doesn't match a static file gets served the spa*/, function (req, res) {
-	res.sendfile("index.html", {
+	res.sendFile("index.html", {
 		root: path.join(__dirname, "./" + process.argv[2])
 	});
 });
