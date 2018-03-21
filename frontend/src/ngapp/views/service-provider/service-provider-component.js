@@ -1,14 +1,14 @@
 import ngapp from '../../ngappmodule.js';
 
-const COMPONENT_NAME = 'ondemandComponent';
+const COMPONENT_NAME = 'serviceProviderComponent';
 
 var def = {
 	controller: [function () {
-		
+		var $ctrl = this;
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./ondemand.html'),
+		templateUrl: require('./service-provider.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

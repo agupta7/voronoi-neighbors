@@ -1,0 +1,28 @@
+<div ng-init="zoom=16">
+	<!-- <p><a href="/ondemand">Go to page 2</a></p> -->
+	Click on the map to add more points!
+	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button>
+	<section>
+		<div ng-show="POIs.length">
+			<table class="bordered">
+				<thead>
+					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+					<th>Name</th>
+					<!-- <th>Cartesian</th> -->
+					<th>Remove</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="point in POIs">
+						<td>{{point.lat}}, {{point.lng}}</td>
+						<td><input type="text" ng-model="point.name"></td>
+						<!-- <td>{{CartesianPoint.fromLatLng(point)}}</td> -->
+						<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Remove</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div>
+			<gmap zoom="zoom" center="AUBURN_DOWNTOWN" markers="POIs" options="{'markersEditor': true, 'autoVoronoi': true}" style="display: block; height: 600px;"></gmap>
+		</div>
+	</section>
+</div>
