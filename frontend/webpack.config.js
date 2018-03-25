@@ -50,10 +50,15 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			module: {
 				rules: []
 			},
-			plugins: [new webpack.DefinePlugin({
-				'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend']))
-			})],
-			devtool: 'inline-source-map',
+			plugins: [
+				new webpack.DefinePlugin({
+					'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend']))
+				}),
+				new CopyWebpackPlugin([{
+					from: __dirname + '/src/webpack.copy'
+				}])
+			],
+			devtool: !disableSourceMap ? (isDebug || isProd ? 'source-map' : 'inline-source-map') : '',
 			devServer: {
 				host: '0.0.0.0', // comment this out to listen on only localhost
 				disableHostCheck: true, // comment this out to force localhost serving
@@ -77,8 +82,10 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			test: /\.css$/,
 			use: cssExtractPlugin.extract({
 				use: [
-					{loader: 'css-loader', query: {sourceMap: !disableSourceMap, minimize: isProd ? {discardComments: {removeAll: true}} : false}}
-				]
+					{loader: 'css-loader', query: {sourceMap: !disableSourceMap, minimize: isProd ? true /*{discardComments: {removeAll: true}}*/ : false}}
+				],
+				/* browsers load css assets with respect to location of the CSS file which is 'css/[name]-[hash].css' */
+				publicPath: '../'
 			})
 		});
 		config.module.rules.push({
@@ -87,7 +94,8 @@ module.exports = function (env) { // webpack will invoke the exported function w
 				use: [
 					{loader: 'css-loader', query: {sourceMap: !disableSourceMap, minimize: isProd}},
 					{loader: 'less-loader', query: {sourceMap: !disableSourceMap}}
-				]
+				],
+				publicPath: '../'
 			})
 		});
 		
@@ -138,18 +146,12 @@ module.exports = function (env) { // webpack will invoke the exported function w
 				new webpack.optimize.UglifyJsPlugin({
 					sourceMap: !disableSourceMap,
 					minimize: true
-				}),
+				})
 				
 				// Copy assets from the public folder
 				// Reference: https://github.com/kevlened/copy-webpack-plugin
-				new CopyWebpackPlugin([
-					{
-						from: __dirname + '/src/webpack.copy'
-					}
-				])
+				
 			);
-			
-			config.devtool = 'source-map';
 		}
 
 		return config;

@@ -1,0 +1,30 @@
+dataowner-component gmap {
+	display: block;
+	height: calc(100vh - 7.5rem);
+	max-height: 85vh;
+}
+
+dataowner-component #pois {
+	height: calc(100vh - 7.5rem);
+	max-height: 85vh;
+	overflow-y: auto;
+}
+
+::-webkit-scrollbar
+{
+  width: 0.5rem;  /* for vertical scrollbars */
+  height: 0.5rem; /* for horizontal scrollbars */
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(246, 117, 94, 0.8);
+  border-radius: 1rem;
+}

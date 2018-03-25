@@ -1,6 +1,6 @@
 import ngapp from '../../ngappmodule.js';
 
-const COMPONENT_NAME = 'ondemandComponent';
+const COMPONENT_NAME = 'creditsComponent';
 
 var def = {
 	controller: [function () {
@@ -8,7 +8,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./ondemand.html'),
+		templateUrl: require('./credits.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

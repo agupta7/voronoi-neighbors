@@ -1,0 +1,25 @@
+<div ng-init="zoom=16" class="container">
+	<!-- Click on the map to add more points!
+	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button> -->
+	<section class="row">
+		<gmap class="column" zoom="zoom" center="AUBURN_DOWNTOWN" markers="POIs" options="{'markersEditor': true, 'autoVoronoi': true}"></gmap>
+		<div class="column" class="halo" ng-show="POIs.length" id="pois">
+			<table class="">
+				<thead>
+					<th>Name</th>
+					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+					<!-- <th>Cartesian</th> -->
+					<th>Remove</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="point in POIs">
+						<td>{{point.name}}</td>
+						<td>{{point.lat}}&deg;, {{point.lng}}&deg;</td>
+						<!-- <td>{{CartesianPoint.fromLatLng(point)}}</td> -->
+						<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Remove</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+</div>

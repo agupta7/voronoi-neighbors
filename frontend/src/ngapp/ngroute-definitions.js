@@ -11,9 +11,21 @@ var routes = {
 			}]
 		}
 	},
-	'/ondemand': {
-		'html': '<ondemand-component></ondemand-component>',
-		'loader': require('bundle-loader?name=ondemand-component&lazy!./views/ondemand/ondemand-component.js')
+	'/data-owner': {
+		'html': '<dataowner-component></dataowner-component>',
+		'loader': require('./views/dataowner/dataowner-component.js')
+	},
+	'/service-provider': {
+		'html': '<service-provider-component></service-provider-component>',
+		'loader': require('./views/service-provider/service-provider-component.js')
+	},
+	'/end-user': {
+		'html': '<end-user-component></end-user-component>',
+		'loader': require('./views/end-user/end-user-component.js')
+	},
+	'/credits': {
+		'html': '<credits-component></credits-component>',
+		'loader': require('bundle-loader?name=credits-component&lazy!./views/credits/credits-component.js')
 	}
 };
 

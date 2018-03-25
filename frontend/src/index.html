@@ -7,13 +7,20 @@
   <title>Voronoi Demo</title>
   <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <base href="/">
 </head>
 <body>
-  <ul>
-    <li active-class-route="/"><a href="/">Home</a></li>
-  </ul>
-  <ng-view></ng-view>
+	<nav id="top-nav">
+		<ul>
+			<li active-class-route="/"><a href="/">Home</a></li>
+			<li active-class-route="/data-owner"><a href="/data-owner">Data Owner</a></li>
+			<li active-class-route="/service-provider"><a href="/service-provider">Service Provider</a></li>
+			<li active-class-route="/end-user"><a href="/end-user">End User</a></li>
+			<li active-class-route="/credits"><a href="/credits">Credits</a></li>
+		</ul>
+	</nav>
+	<section id="main">
+		<ng-view class="inner"></ng-view>
+	</section>
 </body>
 </html>

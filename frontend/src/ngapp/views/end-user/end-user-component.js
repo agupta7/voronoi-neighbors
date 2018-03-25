@@ -1,6 +1,6 @@
 import ngapp from '../../ngappmodule.js';
 
-const COMPONENT_NAME = 'homeComponent';
+const COMPONENT_NAME = 'endUserComponent';
 
 var def = {
 	controller: [function () {
@@ -8,7 +8,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./home.html'),
+		templateUrl: require('./end-user.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

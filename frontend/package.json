@@ -1,5 +1,5 @@
 {
-  "name": "Voronoi-frontend",
+  "name": "voronoi-frontend",
   "version": "0.1.0",
   "description": "The frontend to the k nearest neighbors project based on Voronoi cells.",
   "main": "webpack.config.js",
@@ -27,7 +27,8 @@
     "angular": "^1.6.5",
     "angular-route": "^1.6.5",
     "express": "^4.15.3",
-    "http-proxy": "^1.16.2"
+    "http-proxy": "^1.16.2",
+    "milligram": "^1.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
