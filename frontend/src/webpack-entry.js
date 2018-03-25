@@ -8,7 +8,9 @@
 import ng from 'expose-loader?angular!angular';
 
 import './styles/reset.css';
+import 'milligram';
 import './styles/app.css';
+//import './styles/main.css';
 
 import ngapp from './ngapp/ngappmodule.js';
 // from DefinePlugin in webpack.config.json)

@@ -10,14 +10,17 @@
   <base href="/">
 </head>
 <body>
-	<nav>
+	<nav id="top-nav">
 		<ul>
 			<li active-class-route="/"><a href="/">Home</a></li>
 			<li active-class-route="/data-owner"><a href="/data-owner">Data Owner</a></li>
 			<li active-class-route="/service-provider"><a href="/service-provider">Service Provider</a></li>
 			<li active-class-route="/end-user"><a href="/end-user">End User</a></li>
+			<li active-class-route="/credits"><a href="/credits">Credits</a></li>
 		</ul>
 	</nav>
-  <ng-view></ng-view>
+	<section id="main">
+		<ng-view class="inner"></ng-view>
+	</section>
 </body>
 </html>

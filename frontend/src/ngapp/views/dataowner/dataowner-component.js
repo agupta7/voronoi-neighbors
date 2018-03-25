@@ -1,6 +1,7 @@
 import ngapp from '../../ngappmodule.js';
 import dataService from '../../services/data.js';
 import CartesianPoint from '../../../voronoi-util/CartesianPoint.js';
+import './dataowner.css';
 
 const COMPONENT_NAME = 'dataownerComponent';
 

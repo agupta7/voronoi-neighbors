@@ -21,7 +21,11 @@ var routes = {
 	},
 	'/end-user': {
 		'html': '<end-user-component></end-user-component>',
-		'loader': require('bundle-loader?name=ondemand-component&lazy!./views/end-user/end-user-component.js')
+		'loader': require('./views/end-user/end-user-component.js')
+	},
+	'/credits': {
+		'html': '<credits-component></credits-component>',
+		'loader': require('bundle-loader?name=credits-component&lazy!./views/credits/credits-component.js')
 	}
 };
 
