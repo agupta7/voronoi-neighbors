@@ -85,6 +85,14 @@ function _getNeighbors() {
 			}
 		}
 	}
+	var referencePoint = CartesianPoint.fromLatLng(this.owner);
+	neigh.sort(function (cellA, cellB) {
+		var pointA = CartesianPoint.fromLatLng(cellA.owner);
+		var pointB = CartesianPoint.fromLatLng(cellB.owner);
+		var angleA = Math.atan2(pointA.y - referencePoint.y, pointA.x - referencePoint.x);
+		var angleB = Math.atan2(pointB.y - referencePoint.y, pointB.x - referencePoint.x);
+		return angleA - angleB;
+	});
 
 	return neigh;
 }

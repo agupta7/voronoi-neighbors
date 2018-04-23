@@ -1,0 +1,50 @@
+<div class="container">
+	<section ng-show="!panel">	
+		<table style="max-width: 100%;">
+			<thead>
+				<th>Location (String)</th>
+				<th>Tail (String)</th>
+				<th>Neighbors (String)</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="point in POIs">
+					<td>{{point.lat}},{{point.lng}}</td>
+					<td>{{point.tail.name}}{{point.tail.phone}}{{point.tail.address}}</td>
+					<td style="word-break:break-all;">{{point.neighbors.length}},<span ng-repeat="n in point.neighbors">{{n.lat}},{{n.lng}}<span ng-hide="$last">,</span></td>
+				</tr>
+			</tbody>
+		</table>
+		<div style="text-align: right;"><button ng-click="panel = 1">Next</button></div>
+	</section>
+	<section ng-show="panel == 1">
+		<table style="max-width: 100%;">
+			<thead>
+				<th>Location (Hex)</th>
+				<th>Tail (Hex)</th>
+				<th>Neighbors (Hex)</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="point in POIs">
+					<td style="word-break: break-all;">{{ (point.lat + ',' + point.lng)|hex}}</td>
+					<td style="word-break: break-all;">{{ (point.tail.name + point.tail.phone + point.tail.address)|hex}}</td>
+					<td style="word-break:break-all;"><span ng-bind="authenticationNeighbors(point.neighbors)|hex"></span></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="row">
+			<div class="column"><button ng-click="panel = 0">Back</button></div>
+			<div class="column" style="text-align: right;"><button ng-click="panel = 2">Next</button></div>
+		</div>
+	</section>
+	<section ng-show="panel == 2">
+		<form name="signingForm" ng-submit="$ctrl.submit(POIs, keypair.private)">
+			<div class="row">
+				<div class="column"><textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" ng-model="keypair.private" rsa-key placeholder="Enter private key as hex string"></textarea></div>
+			</div>
+			<div class="row">
+					<div class="column"><button ng-click="panel = 1">Back</button></div>
+				<div class="column" style="text-align: right;"><button type="submit">Submit</button></div>
+			</div>
+		</form>
+	</section>
+</div>

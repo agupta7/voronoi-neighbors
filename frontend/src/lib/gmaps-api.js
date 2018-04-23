@@ -17,18 +17,14 @@ module.provider('gmapsApiLoader', [function () {
 		
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'https://maps.googleapis.com/maps/api/js?callback=initMap&key=' + GMAPS_API_KEY;
+		script.src = 'https://maps.googleapis.com/maps/api/js?callback=initMapCallback&key=' + GMAPS_API_KEY;
 		
 		return $q(function (resolver, rejector) {
-			$window.initMap = function () {
-				initMap($window.google.maps);
+			$window.initMapCallback = function () {
+				resolver($window.google.maps);
 			};
 			
 			document.body.appendChild(script);
-			
-			function initMap(gmaps) {
-				resolver(gmaps);
-			}
 		});
 	}];
 }]);

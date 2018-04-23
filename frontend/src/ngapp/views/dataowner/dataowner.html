@@ -3,23 +3,28 @@
 	<button type="button" ng-click="$ctrl.zoomToggle(zoom)">{{zoom == 16 ? 'Zoom out' : 'Zoom in'}}</button> -->
 	<section class="row">
 		<gmap class="column" zoom="zoom" center="AUBURN_DOWNTOWN" markers="POIs" options="{'markersEditor': true, 'autoVoronoi': true}"></gmap>
-		<div class="column" class="halo" ng-show="POIs.length" id="pois">
-			<table class="">
-				<thead>
-					<th>Name</th>
-					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
-					<!-- <th>Cartesian</th> -->
-					<th>Remove</th>
-				</thead>
-				<tbody>
-					<tr ng-repeat="point in POIs">
-						<td>{{point.name}}</td>
-						<td>{{point.lat}}&deg;, {{point.lng}}&deg;</td>
-						<!-- <td>{{CartesianPoint.fromLatLng(point)}}</td> -->
-						<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Remove</button></td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="column column-2nd">
+			<div style="display: flex; flex-direction: column; height: calc(95vh - 7.5rem);">
+				<div style="margin-bottom: 1rem;">Click on the map on the left to add latitude/longitue points to the table.  You can also <button ng-click="$ctrl.loadHardcoded()" style="margin-bottom: 0;">Load hardcoded data</button> about restaurants in downtown Auburn, AL.</div>
+				<div class="halo" ng-show="POIs.length" id="pois">
+					<table class="">
+						<thead>
+							<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+							<th>Name</th>
+							<!-- <th>Cartesian</th> -->
+							<th>Remove</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="point in POIs" ng-click="point.expanded = !point.expanded" poi-row ng-class-even="'even'" ng-class="{'expanded': point.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
+								<td>{{point.lat}}&deg;, {{point.lng}}&deg;</td>
+								<td><input type="text" ng-model="point.tail.name" ng-focus="point.expanded = true"></td>
+								<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Remove</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="text-align: right;"><button ng-click="$ctrl.prepareAuthentication()">Send to data provider</button></div>
+			</div>
 		</div>
 	</section>
 </div>

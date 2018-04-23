@@ -8,7 +8,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./home.html'),
+		template: require('!raw-loader!./home.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

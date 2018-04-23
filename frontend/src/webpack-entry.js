@@ -10,13 +10,29 @@ import ng from 'expose-loader?angular!angular';
 import './styles/reset.css';
 import 'milligram';
 import './styles/app.css';
+import 'ng-dialog/css/ngDialog.css';
+import 'ng-dialog/css/ngDialog-theme-default.css';
 //import './styles/main.css';
 
 import ngapp from './ngapp/ngappmodule.js';
 // from DefinePlugin in webpack.config.json)
 ngapp._value('API_URL_BASE', __WEBPACK__API_URL_BASE); 
 
+// Directives that can be used anywhere in HTML
 import {delayCompileDirective}  from './ngapp/ngroute-definitions.js';
-
 import gmap from './ngapp/views/gmap/gmap.js';
-import dataService from './ngapp/services/data.js';
+import rsaKeyDirective from './ngapp/views/rsaKey/rsaKeyDirective.js';
+// Filters can also be used anywhere in HTML
+import hexFilter from './ngapp/services/hexFilter.js';
+
+/**
+ * These don't need to be imported here because they are automatically included by the node dependency system whereever imported within the ngapp
+ * Listing them here, commented, so they're in one place
+ * 
+ * import dataService from './ngapp/services/data.js';
+ * import debouceService from './ngapp/services/debounce.js';
+ * import util from './ngapp/services/util.js';
+ * import crypto from './ngapp/services/crypto.js';
+ */
+
+//

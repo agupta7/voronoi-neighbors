@@ -16,7 +16,8 @@ function gmapDirective(gmapsApiLoader) {
 				'zoom': '=',
 				'center': '=',
 				'markers': '=',
-				'options': '='
+				'options': '=',
+				'voronoiInfo': '=?'
 			},
 			link: function (scope, element, attrs, ctrl) {
 				gmapsApiLoader.then(function (googleMaps) {
@@ -119,6 +120,7 @@ function gmapController($scope, $window, debounce) {
 		
 		// housekeeping
 		if (!alreadyAddedToMarkers) {
+			$scope.$emit('pointAdded', latlng);
 			$scope['markers'].push(latlng);
 		}
 		if ($scope.$eval('options.autoVoronoi')) {
@@ -154,6 +156,7 @@ function gmapController($scope, $window, debounce) {
 		var voronoiEdges = diagram.edges;
 		$scope.voronoi.centers = points;
 		$scope.voronoi.diagram = diagram;
+		$scope.voronoiInfo = diagram;
 
 		for (var i = 0; i < voronoiEdges.length; i++) {
 			var edge = voronoiEdges[i];

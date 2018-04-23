@@ -1,0 +1,15 @@
+<!-- repeat="point in POIs" //-->
+<tr class="poi-details" ng-click="point.expanded = !point.expanded" ng-class="{'expanded': point.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
+	<td colspan="3">
+		<div class="container">
+			<div class="row">
+				<div class="column column-offset-25 label"><label for="{{'phone'+ $index}}">Phone: </label></div>
+				<div class="column" style="max-width: 20rem;"><input id="{{'phone' + $index}}" type="tel" ng-model="point.tail.phone"></div>
+			</div>
+			<div class="row">
+				<div class="column column-offset-25 label"><label for="{{'address' + $index}}">Address: </label></div>
+				<div class="column" style="max-width: 25rem;"><input id="{{'address' + $index}}" type="text" ng-model="point.tail.address"></div>
+			</div>
+		</div>
+	</td>
+</tr>

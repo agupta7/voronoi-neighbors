@@ -18,7 +18,7 @@ p {
 }
 
 a, a:VISITED {
-	color: blue;
+	color: #ff7961;
 	text-decoration: none;
 }
 a:ACTIVE {
@@ -53,10 +53,101 @@ input[type='submit'] {
 	background-color: #f6755e;
 	border: 0.1rem solid #f6755e;
 }
+.button:focus, button:focus, input[type='button']:focus, input[type='reset']:focus, input[type='submit']:focus {
+	background-color: #f6755e;
+	border: 0.1rem solid #f6755e;
+}
+.button:active, button:active, input[type='button']:active, input[type='reset']:active, input[type='submit']:active {
+	background-color: #f6755e;
+	border: 0.1rem solid #f6755e;
+}
+
+input[type='email'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='url'],
+textarea,
+select {
+	background-color: #FFF;
+	color: #F93411;
+}
 
 .container {
-	max-width: 160rem;
+	max-width: 170rem;
+	padding: 0 1.0rem;
 }
+
+/* ngdialog overrides */
+@-webkit-keyframes ngdialog-flyin {
+	0% {
+	  opacity: 0;
+	  -webkit-transform: translateY(-40px);
+	  transform: translateY(-40px);
+	}
+ 
+	100% {
+	  opacity: 1;
+	  -webkit-transform: translateY(0);
+	  transform: translateY(0);
+	}
+ }
+ 
+ @keyframes ngdialog-flyin {
+	0% {
+	  opacity: 0;
+	  -webkit-transform: translateY(-40px);
+	  transform: translateY(-40px);
+	}
+ 
+	100% {
+	  opacity: 1;
+	  -webkit-transform: translateY(0);
+	  transform: translateY(0);
+	}
+ }
+ 
+ @-webkit-keyframes ngdialog-flyout {
+	0% {
+	  opacity: 1;
+	  -webkit-transform: translateY(0);
+	  transform: translateY(0);
+	}
+ 
+	100% {
+	  opacity: 0;
+	  -webkit-transform: translateY(-40px);
+	  transform: translateY(-40px);
+	}
+ }
+ 
+ @keyframes ngdialog-flyout {
+	0% {
+	  opacity: 1;
+	  -webkit-transform: translateY(0);
+	  transform: translateY(0);
+	}
+ 
+	100% {
+	  opacity: 0;
+	  -webkit-transform: translateY(-40px);
+	  transform: translateY(-40px);
+	}
+ }
+
+.ngdialog .ngdialog-close {
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #000;
+	font-size: 3rem;
+	padding-right: 1rem;
+ }
 
 
 /* Voronoi app navigation*/
@@ -64,11 +155,12 @@ input[type='submit'] {
 	display: block;
 	background-color: #f6755e;
 	color: #fff;
+	margin-bottom: 1rem;
 }
 #top-nav ul {
 	list-style: none;
+	margin-bottom: 0;
 	justify-content: space-around;
-	margin-bottom: 1rem;
 	padding: 0.5rem 0.3rem;
 	display: flex;
 }
@@ -98,16 +190,18 @@ input[type='submit'] {
 ng-view {
 	display: block;
 }
-
+#main {
+	padding: 0 1rem;
+}
 #main > .inner {
 	/* width: 128rem; */
 	margin: 0 auto;
-	max-width: 95%;
+	max-width: 100%;
 }
 .halo {
 	margin-bottom: 2rem;
-	background: rgba(255, 255, 255, 0.175);
-	border: 1px solid rgba(255, 255, 255, 0.175);
+	background: rgba(255, 255, 255, 0.125);
+	border: 1px solid rgba(255, 255, 255, 0.275);
 	padding: 1rem;
 	-webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.75);
 	-moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.75);
@@ -115,3 +209,17 @@ ng-view {
 	border-radius: 4px;
 }
 
+.table {
+	display: table;
+}
+.table-row {
+	display: table-row;
+}
+.table-header {
+	font-weight: bold;
+}
+.table-header, .table-cell {
+	display: table-cell;
+	padding: 1rem;
+	/* border-bottom: 0.1rem solid #e1e1e1; */
+}

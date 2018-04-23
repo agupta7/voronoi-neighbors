@@ -1,6 +1,7 @@
 import ng from 'angular';
 import ngroute from 'angular-route';
-import gmapsApi from '../gmaps-api/gmaps-api.js';
+import gmapsApi from '../lib/gmaps-api.js';
+import ngDialog from 'imports-loader?angular=angular!ng-dialog';
 
 // This should stay in sync with ng-app tag in ../index.html
 const NG_APP_NAME = 'voronoi';
@@ -9,7 +10,7 @@ const NG_APP_NAME = 'voronoi';
  *	This is the module that represents the angularjs application for the boilerplate
  *	Check out ngroute-definitions for the wiring that makes the pages work.
  */
-var ngappmodule = ng.module(NG_APP_NAME, [ngroute, gmapsApi]);
+var ngappmodule = ng.module(NG_APP_NAME, [ngroute, gmapsApi, 'ngDialog']);
 
 ngappmodule.config(["$locationProvider", function ($locationProvider) {
 	$locationProvider.html5Mode(true);
@@ -18,6 +19,7 @@ ngappmodule.config(["$locationProvider", function ($locationProvider) {
 ngappmodule._controller = ngappmodule.controller;
 ngappmodule._service = ngappmodule.service;
 ngappmodule._factory = ngappmodule.factory;
+ngappmodule._filter = ngappmodule.filter;
 ngappmodule._value = ngappmodule.value;
 ngappmodule._directive = ngappmodule.directive;
 ngappmodule._component = ngappmodule.component;

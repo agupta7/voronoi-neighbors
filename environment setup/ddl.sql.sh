@@ -3,12 +3,22 @@
 echo "Make sure the packages postgresql & postgis are installed: apt/yum/dnf install postgresql postgis"
 
 DB_NAME=$1
+PASSWORD=$2
 
 if [ "${DB_NAME}" == "" ]; then
 	DB_NAME="voronoi_neighbors"
 fi
 
+if [ "${PASSWORD}" == "" ]; then
+	PASSWORD="voronoi"
+fi
+
+USER="${DB_NAME}"
+
 sudo -u postgres psql << EOF
+
+DROP USER IF EXISTS $USER;
+DROP DATABASE IF EXISTS $DB_NAME;
 
 CREATE DATABASE $DB_NAME;
 
@@ -20,10 +30,6 @@ CREATE EXTENSION postgis;
 --show postgis version:
 --	SELECT postgis_full_version();
 
-CREATE TABLE POIs (id integer, name varchar, location geometry);
-
-ALTER TABLE "pois"
-ADD CONSTRAINT "pois_id" PRIMARY KEY ("id");
-
-CREATE INDEX idx_poi_locations ON POIs using gist(location);
+CREATE USER $USER WITH PASSWORD '$PASSWORD';
+GRANT ALL PRIVILEGES ON DATABASE $DB_NAME to $USER
 EOF
