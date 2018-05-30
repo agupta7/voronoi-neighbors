@@ -4,17 +4,18 @@ import crypto from '../../services/crypto.js';
 import dataService from '../../services/data.js';
 
 
-const CONTROLLER_NAME = 'signatureModalController';
+const CONTROLLER_NAME = 'maliciousSignatureModalController';
 
 var def = {
 	'controller': ['$scope', crypto.toString(), dataService.toString(), function ($scope, crypto, dataService) {
 		var $ctrl = this;
 
-		var keypair = crypto.generateKeys();
+		var keypair = {};
+		$ctrl.crypto = crypto;
 		$scope.keypair = keypair;
 
-		$ctrl.submit =function submit(points, rsaPrivateKey) {
-			dataService.sendPoints(points, null, rsaPrivateKey).then(function () {
+		$ctrl.submit =function submit(diff, rsaPrivateKey) {
+			dataService.sendChanges(diff, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;
 			});
 		};

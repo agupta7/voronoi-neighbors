@@ -80,6 +80,19 @@ select {
 	padding: 0 1.0rem;
 }
 
+h3 {
+	margin-bottom: 1.6rem;
+}
+h4 {
+	margin-bottom: 1.2rem;
+}
+h5 {
+	margin-bottom: 1.0rem;
+}
+h6 {
+	margin-bottom: 0.8rem;
+}
+
 /* ngdialog overrides */
 @-webkit-keyframes ngdialog-flyin {
 	0% {
@@ -222,4 +235,72 @@ ng-view {
 	display: table-cell;
 	padding: 1rem;
 	/* border-bottom: 0.1rem solid #e1e1e1; */
+}
+
+.poi-details .row .column.label {
+	max-width: 15rem;
+}
+.poi-details label {
+	margin-bottom: 0;
+}
+#pois tr.poi-details {
+	display: none;
+}
+#pois tr.poi-details.expanded {
+	display: table-row;
+}
+#pois.halo tr.even {
+	background-color: rgba(255, 255, 255, 0.09);
+ }
+#pois tr.expanded,
+#pois tr.even.expanded {
+	background-color: rgba(246, 117, 94, 0.5);
+}
+#pois tr.expanded.hovering,
+#pois tr.even.expanded.hovering {
+	background-color: rgba(246, 117, 94, 0.38);
+}
+
+ #pois tbody tr:HOVER, 
+ #pois tbody tr.even:HOVER {
+	background-color: rgba(255, 255, 255, 0.4);
+	cursor: pointer;
+ }
+ 
+ /* dataowner-component #pois td {
+	
+ } */
+ #pois th:first-child, dataowner-component #pois td:first-child {
+	padding-left: 1rem;
+ }
+ #pois tr th:last-child, dataowner-component #pois tr td:last-child {
+	padding-right: 1rem;
+ }
+ #pois tr.expanded:not(.poi-details) td {
+	border-bottom: 0;
+ }
+
+input.ng-invalid, textarea.ng-invalid,
+input.ng-invalid, textarea.ng-invalid {
+  border: 0.3rem solid red;
+}
+
+.ngdialog.dataowner-component.signature-modal .ngdialog-content {
+	-webkit-animation: ngdialog-flyin .5s;
+	animation: ngdialog-flyin .5s;
+	background: #f0f0f0;
+	border-radius: 0.5rem;
+	color: #444;
+	margin: 0 auto;
+	max-width: 100%;
+	padding: 2em 1em 1em;
+	position: relative;
+	width: 75%;
+	height: 80%;
+	overflow-y: auto;
+}
+ 
+.ngdialog.dataowner-component.signature-modal.ngdialog-closing .ngdialog-content {
+	-webkit-animation: ngdialog-flyout .5s;
+	animation: ngdialog-flyout .5s;
 }

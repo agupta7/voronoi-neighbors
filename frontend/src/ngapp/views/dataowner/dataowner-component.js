@@ -2,7 +2,6 @@ import ngapp from '../../ngappmodule.js';
 import dataService from '../../services/data.js';
 import CartesianPoint from '../../../voronoi-util/CartesianPoint.js';
 import './dataowner.css';
-import poiRowDirective from './poiRowDirective.js';
 import voronoiDiagram from '../../../voronoi-util/voronoi.js';
 import signatureModalController from './signatureModalController.js';
 
@@ -16,7 +15,7 @@ var def = {
 
 		$q.all([dataService.getPoints()]).then(function (resolves) {
 			//var gmapCtrl = resolves[0];
-			var points = resolves[0].map(serviceToViewPoint);
+			var points = resolves[0];
 
 			//$scope['gmapCtrl'] = gmapCtrl;
 			$scope['POIs'] = ($scope['POIs'] || []).concat(points);
@@ -80,14 +79,6 @@ var def = {
 			}
 			return out;
 		}
-
-		function serviceToViewPoint(point) {
-			// gmap directive expects lat lng here
-			point.lat = point.location.lat;
-			point.lng = point.location.lng;
-			delete point['location'];
-			return point;
-		}
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
@@ -104,7 +95,6 @@ var def = {
 function doit() {
 	ngapp._controller(def.controllerName, def.controller);
 	ngapp._component(def.componentName, def.componentDdo);
-	ngapp._directive(poiRowDirective.name, poiRowDirective.ddo);
 	return def;
 }
 

@@ -21,5 +21,11 @@ def updatePOIs():
 	knn.uploadData(js)
 	return 'pass'
 
+@app.route('/malicious/changes', methods=['POST'])
+def maliciousUpdate():
+	js = request.get_json()
+	knn.maliciousUploadData(js)
+	return 'pass'
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=8087)

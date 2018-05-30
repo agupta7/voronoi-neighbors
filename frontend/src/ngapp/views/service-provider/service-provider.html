@@ -1,3 +1,27 @@
-<div>
+<div class="container">
 	<h1>Service Provider View</h1>
+	<table id="pois">
+		<thead>
+			<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+			<th>Name</th>
+			<!-- <th>Cartesian</th> -->
+			<th>Remove</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="point in POIs" ng-click="point.$view.expanded = !point.$view.expanded" poi-row ng-class-even="'even'" ng-class="{'expanded': point.$view.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
+				<td>
+					<input type="text" ng-model="point.lat" ng-focus="point.$view.expanded = true" style="width: initial;">&deg;,
+					<input type="text" ng-model="point.lng" ng-focus="point.$view.expanded = true" style="width: initial;">&deg;
+				</td>
+				<td><input type="text" ng-model="point.tail.name" ng-focus="point.$view.expanded = true"></td>
+				<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Drop POI from DB</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="container">
+		<div class="row">
+			<div class="column" style="text-align: left;"><button ng-click="$ctrl.addPoint()">Add malicious point</button></div>
+			<div class="column" style="text-align: right;"><button ng-click="$ctrl.submitChanges(POIs)">Send malicious changes</button></div>
+		</div>
+	</div>
 </div>

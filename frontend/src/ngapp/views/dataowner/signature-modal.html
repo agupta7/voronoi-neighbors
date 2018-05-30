@@ -27,7 +27,7 @@
 				<tr ng-repeat="point in POIs">
 					<td style="word-break: break-all;">{{ (point.lat + ',' + point.lng)|hex}}</td>
 					<td style="word-break: break-all;">{{ (point.tail.name + point.tail.phone + point.tail.address)|hex}}</td>
-					<td style="word-break:break-all;"><span ng-bind="authenticationNeighbors(point.neighbors)|hex"></span></td>
+					<td style="word-break: break-all;"><span ng-bind="authenticationNeighbors(point.neighbors)|hex"></span></td>
 				</tr>
 			</tbody>
 		</table>
@@ -39,12 +39,16 @@
 	<section ng-show="panel == 2">
 		<form name="signingForm" ng-submit="$ctrl.submit(POIs, keypair.private)">
 			<div class="row">
-				<div class="column"><textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" ng-model="keypair.private" rsa-key placeholder="Enter private key as hex string"></textarea></div>
+				<div class="column"><textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" required ng-model="keypair.private" rsa-key placeholder="Enter private key as hex string"></textarea></div>
 			</div>
 			<div class="row">
 					<div class="column"><button ng-click="panel = 1">Back</button></div>
 				<div class="column" style="text-align: right;"><button type="submit">Submit</button></div>
 			</div>
 		</form>
+	</section>
+	<section ng-show="panel == 1000">
+		<p>The data has been submitted.</p>
+		<div class="column" style="text-align: right;"><button ng-click="closeThisDialog()">Close</button></div>
 	</section>
 </div>

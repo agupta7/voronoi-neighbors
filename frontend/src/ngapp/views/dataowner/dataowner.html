@@ -15,9 +15,9 @@
 							<th>Remove</th>
 						</thead>
 						<tbody>
-							<tr ng-repeat="point in POIs" ng-click="point.expanded = !point.expanded" poi-row ng-class-even="'even'" ng-class="{'expanded': point.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
+							<tr ng-repeat="point in POIs" ng-click="point.$view.expanded = !point.$view.expanded" poi-row ng-class-even="'even'" ng-class="{'expanded': point.$view.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
 								<td>{{point.lat}}&deg;, {{point.lng}}&deg;</td>
-								<td><input type="text" ng-model="point.tail.name" ng-focus="point.expanded = true"></td>
+								<td><input type="text" ng-model="point.tail.name" ng-focus="point.$view.expanded = true"></td>
 								<td><button ng-click="POIs.splice(POIs.indexOf(point), 1)">Remove</button></td>
 							</tr>
 						</tbody>

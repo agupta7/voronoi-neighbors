@@ -1,5 +1,5 @@
 <!-- repeat="point in POIs" //-->
-<tr class="poi-details" ng-click="point.expanded = !point.expanded" ng-class="{'expanded': point.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
+<tr class="poi-details" ng-click="point.$view.expanded = !point.$view.expanded" ng-class="{'expanded': point.$view.expanded, 'hovering': hovering}" ng-mouseenter="hovering = true" ng-mouseleave="hovering = false">
 	<td colspan="3">
 		<div class="container">
 			<div class="row">

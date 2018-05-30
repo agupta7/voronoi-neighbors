@@ -12,10 +12,23 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 	var service = this;
 
 	service.getPoints = function getPoints() {
-		return $http.get(API_URL_BASE + '/pois').then(dataGetter);
+		return $http.get(API_URL_BASE + '/pois').then(dataGetter).then(function (points) {
+			return points.map(function serviceToViewPoint(point) {
+				// gmap directive expects lat lng here
+				point.lat = point.location.lat;
+				point.lng = point.location.lng;
+				delete point['location'];
+				return point;
+			});
+		});
 	};
 	service.getHardcoded = function getHardcoded() {
-		return ng.copy(POINTS);
+		return ng.copy(POINTS).map(function (point) {
+			point.lat = point.location.lat;
+			point.lng = point.location.lng;
+
+			return point;
+		});
 	};
 	service.sendPoints = function sendPoints(newpoints, oldpoints, privateRsaKey) {
 		var points = newpoints.map(function (point) {
@@ -24,40 +37,60 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 					'lat': point.lat,
 					'lng': point.lng
 				},
-				'tail': point.tail,
-				'_meta_': {
-					'neighbors': (point.neighbors || []).map(function (neighbor) {
-						return {
-							'location': {
-								'lat': neighbor.lat,
-								'lng': neighbor.lng
-							}
-						};
-					})
-				}
+				'neighbors': point.neighbors || [],
+				'tail': point.tail
 			};
 		});
-		for (var i = 0; i < points.length; i++) {
-			var point = points[i];
-			var verificationBytes = Array.from(util.floatToBytes(point.location.lat));
-			verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(point.location.lng)));
-			verificationBytes.push.apply(verificationBytes, Array.from(util.stringToBytes(point.tail.name + point.tail.phone + point.tail.address)));
-			var neighbors = point['_meta_'].neighbors;
-			var neighborsLengthBytes = Array.from(util.numToBytes(neighbors.length));
-			if (neighborsLengthBytes.length < 2)
-				neighborsLengthBytes.unshift(0);
-			verificationBytes.push.apply(verificationBytes, neighborsLengthBytes);
-			for (var j = 0; j < neighbors.length; j++) {
-				var n = neighbors[j];
-				verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(n.location.lat)));
-				verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(n.location.lng)));
-			}
-
-			point['_meta_']['verificationObject'] = crypto.signHex(util.bytesToHexString(verificationBytes), privateRsaKey);
-		}
-
-		return $http.post(API_URL_BASE + '/updatePois', points);
+		return $http.post(API_URL_BASE + '/updatePois', attachPoiMetadata(points, privateRsaKey));
 	};
+	service.sendChanges = function sendChanges(diff, privateRsaKey) {
+		diff = diff || {};
+		diff.changed = diff.changed || [];
+		diff.deleted = diff.deleted || [];
+
+		attachPoiMetadata(diff.changed, privateRsaKey);
+		attachPoiMetadata(diff.deleted, privateRsaKey);
+		return $http.post(API_URL_BASE + '/malicious/changes', diff);
+	};
+
+	function attachPoiMetadata(points, privateRsaKey) {
+		points = points.map(function (point) {
+			point['_meta_'] = ng.extend(point['_meta_'] || {}, {
+				'neighbors': (point.neighbors || []).map(function (neighbor) {
+					return {
+						'location': {
+							'lat': neighbor.lat,
+							'lng': neighbor.lng
+						}
+					};
+				})
+			});
+			delete point['neighbors'];
+			
+			return point;
+		});
+		if (privateRsaKey) {
+			for (var i = 0; i < points.length; i++) {
+				var point = points[i];
+				var verificationBytes = Array.from(util.floatToBytes(point.location.lat));
+				verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(point.location.lng)));
+				verificationBytes.push.apply(verificationBytes, Array.from(util.stringToBytes(point.tail.name + point.tail.phone + point.tail.address)));
+				var neighbors = point['_meta_'].neighbors;
+				var neighborsLengthBytes = Array.from(util.numToBytes(neighbors.length));
+				if (neighborsLengthBytes.length < 2)
+				neighborsLengthBytes.unshift(0);
+				verificationBytes.push.apply(verificationBytes, neighborsLengthBytes);
+				for (var j = 0; j < neighbors.length; j++) {
+					var n = neighbors[j];
+					verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(n.location.lat)));
+					verificationBytes.push.apply(verificationBytes, Array.from(util.floatToBytes(n.location.lng)));
+				}
+				
+				point['_meta_']['verificationObject'] = crypto.signHex(util.bytesToHexString(verificationBytes), privateRsaKey);
+			}
+		}
+		return points;
+	}
 
 	function dataGetter(httpResponse) {
 		return httpResponse.data;

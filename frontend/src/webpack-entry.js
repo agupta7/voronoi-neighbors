@@ -22,6 +22,7 @@ ngapp._value('API_URL_BASE', __WEBPACK__API_URL_BASE);
 import {delayCompileDirective}  from './ngapp/ngroute-definitions.js';
 import gmap from './ngapp/views/gmap/gmap.js';
 import rsaKeyDirective from './ngapp/views/rsaKey/rsaKeyDirective.js';
+import poiRowDirective from './ngapp/views/poiRow/poiRowDirective.js';
 // Filters can also be used anywhere in HTML
 import hexFilter from './ngapp/services/hexFilter.js';
 

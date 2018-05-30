@@ -1,3 +1,5 @@
+import ng from 'angular';
+
 var util = {
 	'stringToBytes': stringToBytes,
 	'numToBytes': numToBytes,
@@ -5,7 +7,41 @@ var util = {
 	'hexStringToBytes': hexStringToBytes,
 	'bytesToHexString': bytesToHexString,
 	'bytesToString': bytesToString,
-	'Uint8': _Uint8
+	'Uint8': _Uint8,
+	'diffArrays': diffArrays
+}
+
+function diffArrays(oldArr, newArr, equalityComparator, keyFunction) {
+	var changed = [];
+	var deleted = [];
+	var oldMap = {};
+	for (var i = 0; i < oldArr.length; i++) {
+		oldMap[keyFunction(oldArr[i])] = oldArr[i];
+	}
+	var newMap = {};
+	for (var i = 0; i < newArr.length; i++) {
+		newMap[keyFunction(newArr[i])] = newArr[i];
+	}
+	var oldKeys = Object.getOwnPropertyNames(oldMap);
+	var newKeys = Object.getOwnPropertyNames(newMap);
+
+	for (var i = 0; i < newKeys.length; i++) {
+		if (oldMap[newKeys[i]]) {
+			if (equalityComparator(oldMap[newKeys[i]], newMap[newKeys[i]]))
+				continue;
+		}
+		changed.push(newMap[newKeys[i]]);
+	}
+	for (i = 0; i < oldKeys.length; i++) {
+		if (!newMap[oldKeys[i]]) { // value from old array got deleted
+			deleted.push(oldMap[oldKeys[i]]);
+		}
+	}
+
+	return {
+		'changed': changed,
+		'deleted': deleted
+	};
 }
 
 function stringToBytes(str) {
