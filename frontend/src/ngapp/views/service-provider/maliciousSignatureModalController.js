@@ -15,9 +15,12 @@ var def = {
 		$scope.keypair = keypair;
 
 		$ctrl.submit =function submit(diff, rsaPrivateKey) {
-			dataService.sendChanges(diff, rsaPrivateKey).then(function () {
+			dataService.sendMaliciousChanges(diff, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;
 			});
+			if (rsaPrivateKey) {
+				dataService.savePublicKey('service-provider', $scope.keypair.public);
+			}
 		};
 	}],
 	'getName': function () {

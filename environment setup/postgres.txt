@@ -1,0 +1,8 @@
+/etc/postgresql/9.4/main/postgres.conf : Need to change listen_addresses from localhost to '*' in order to listen on all interfaces
+                                       May update default port (5432)
+
+/etc/postgresql/9.4/main/pg_hba.conf : Need to update login methods
+
+    host    all             all             192.168.0.0/16          md5
+
+    By default, md5 (hashed password login) is allowed only on the IPv4 and IPv6 'localhost' interfaces, meaning you won't be able to authenticate from another node on the network even if the listen interface above is changed.

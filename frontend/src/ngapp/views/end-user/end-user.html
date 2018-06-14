@@ -1,6 +1,52 @@
-<div>
+<div ng-init="zoom=16" class="container">
 	<h1>End-user View</h1>
-	<p style="font-weight: bold;">This page's html and its associated assets will load asynchronously</p>
-	<p>This includes controller and component definition js</p>
-  <p>It also includes any unique services required by the component that haven't been already included into the page.</p>
+	<div class="row">
+		<div class="column">
+			<div style="display:flex;">
+				<label>
+					Origin point to search near:&nbsp;&nbsp;&nbsp;<img width="16" height="16" ng-src="{{originDot}}">
+					<input type="text" ng-model="centerAddress" placeholder="Currently {{centerLatLng | latlng }}">
+				</label>
+				<button type="button" ng-click="$ctrl.geocode(centerAddress);" style="margin: 2.5rem 0 0 1rem;">Search</button>
+			</div>
+			<label>Range (meters): <input type="number" ng-model="range" placeholder="Infinity" min="1"></label>
+			<label>Number of nearest neighbors: <input type="number" ng-model="k" placeholder="Infinity" min="1"></label>
+			<button type="button" ng-click="$ctrl.nearestNeighbors(centerLatLng, range, k)">Search for nearest restaurants</button>
+			<div ng-show="nNeighbors.length">
+				<h2>Signature verification<span ng-show="cryptographicVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="cryptographicVerification === false"> - Failed</span></h2>
+				<p>
+					The first step in verifying results involves doing a signature check.  The results from the service provider contain, for each record, some verification data (called a verification object) that is cryptographically signed by the data owner.
+					The end-user's app contains the embedded public key necessary to verify this signature.
+					The signature verification step is common across all query types and ensures that the service provider did not modify the contents of any of the records returned.
+					This is a necessary but insufficient check for ensuring that the service provider is processing queries faithfully.  Notably, signature verification does not detect maliciously added or removed records.
+				</p>
+				<h2>Geometric verification<span ng-show="geometricVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="geometricVerification === false"> - Failed</span></h2>
+			</div>
+		</div>
+		<div class="column" ng-init="centerLatLng = AUBURN_DOWNTOWN">
+			<gmap style="display: block; height: 600px;" zoom="zoom" origin="centerLatLng" markers="nNeighbors" mark-neighbors="true" options="{'markersEditor': true, 'autoVoronoi': true}"></gmap>
+		</div>
+	</div>
+	<div class="row" ng-show="nNeighbors.length">
+		<div class="column">
+			<table id="pois">
+				<thead>
+					<th>Name</th>
+					<th>Distance (meters)</th>
+					<th>Address</th>
+					<th>Phone</th>
+					<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="point in nNeighbors">
+						<td>{{point.tail.name}}</td>
+						<td>{{point._meta_.distance_meters}}</td>
+						<td>{{point.tail.address}}</td>
+						<td>{{point.tail.phone}}</td>
+						<td ng-bind="point | latlng"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

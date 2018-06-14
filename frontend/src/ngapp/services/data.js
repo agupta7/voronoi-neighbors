@@ -43,14 +43,45 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		});
 		return $http.post(API_URL_BASE + '/updatePois', attachPoiMetadata(points, privateRsaKey));
 	};
-	service.sendChanges = function sendChanges(diff, privateRsaKey) {
+	service.sendMaliciousChanges = function sendMaliciousChanges(diff, privateRsaKey) {
 		diff = diff || {};
 		diff.changed = diff.changed || [];
 		diff.deleted = diff.deleted || [];
 
 		attachPoiMetadata(diff.changed, privateRsaKey);
-		attachPoiMetadata(diff.deleted, privateRsaKey);
 		return $http.post(API_URL_BASE + '/malicious/changes', diff);
+	};
+
+	service.nearestNeighbors = function nearestNeighbors(originPoint, range, k) {
+		return $http.get(API_URL_BASE + "/nearestNeighbors", {
+			'params': {
+				'origin': originPoint,
+				'range_meters': range,
+				'k': k
+			}
+		}).then(dataGetter).then(function (neighbors) {
+			return neighbors.map(function serviceToViewPoint(neighbor) {
+				// gmap directive expects lat lng here
+				neighbor.lat = neighbor.location.lat;
+				neighbor.lng = neighbor.location.lng;
+				return neighbor;
+			});
+		});
+	};
+
+	service.savePublicKey = function savePublicKey(source, publicKey) {
+		return $http.post(API_URL_BASE + '/publicKey', {
+			'source': source,
+			'publicKey': publicKey.toString()
+		}).then(dataGetter);
+	};
+
+	service.getPublicKey = function getPublicKey(source) {
+		return $http.get(API_URL_BASE + '/publicKey', {
+			'params': {
+				'source': source
+			}
+		}).then(dataGetter);
 	};
 
 	function attachPoiMetadata(points, privateRsaKey) {

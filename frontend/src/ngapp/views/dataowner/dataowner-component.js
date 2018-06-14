@@ -31,7 +31,6 @@ var def = {
 		$ctrl.loadHardcoded = function () {
 			var POIs = $scope['POIs'] || ($scope['POIs'] = []);
 			var POINTS = dataService.getHardcoded();
-			POINTS = POINTS.map(serviceToViewPoint);
 
 			var existingKeys = POIs.map(keyFunction);
 			var hardcodedKeys = POINTS.map(keyFunction);

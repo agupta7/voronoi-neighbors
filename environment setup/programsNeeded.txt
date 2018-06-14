@@ -1,0 +1,11 @@
+postgresql
+postgis
+pip
+python2.7
+
+To build:
+-------------
+npm
+nodejs
+
+

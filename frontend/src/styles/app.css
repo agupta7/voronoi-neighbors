@@ -270,8 +270,8 @@ ng-view {
  /* dataowner-component #pois td {
 	
  } */
- #pois th:first-child, dataowner-component #pois td:first-child {
-	padding-left: 1rem;
+ #pois th:first-child, #pois td:first-child {
+	padding-left: 0.5rem;
  }
  #pois tr th:last-child, dataowner-component #pois tr td:last-child {
 	padding-right: 1rem;
@@ -283,6 +283,9 @@ ng-view {
 input.ng-invalid, textarea.ng-invalid,
 input.ng-invalid, textarea.ng-invalid {
   border: 0.3rem solid red;
+}
+input::placeholder, input::-moz-placeholder, input::-webkit-input-placeholder, input::-ms-input-placeholder {
+	color: #000;
 }
 
 .ngdialog.dataowner-component.signature-modal .ngdialog-content {

@@ -5,7 +5,7 @@
 
 		<h4>Number of malicious changes that will be sent:</h4>
 		changes / additions : {{diff.changed.length || 0}}<br>
-		removals : {{diff.removed.length || 0}}
+		removals : {{diff.deleted.length || 0}}
 		<div style="text-align: right;"><button ng-click="panel = 1">Next</button></div>
 	</section>
 	<section ng-show="panel == 1">

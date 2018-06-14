@@ -17,6 +17,7 @@ var def = {
 			dataService.sendPoints(points, null, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;
 			});
+			dataService.savePublicKey('dataowner', $scope.keypair.public);
 		};
 	}],
 	'getName': function () {

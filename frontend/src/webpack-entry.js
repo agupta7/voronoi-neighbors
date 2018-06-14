@@ -25,6 +25,7 @@ import rsaKeyDirective from './ngapp/views/rsaKey/rsaKeyDirective.js';
 import poiRowDirective from './ngapp/views/poiRow/poiRowDirective.js';
 // Filters can also be used anywhere in HTML
 import hexFilter from './ngapp/services/hexFilter.js';
+import latlngFilter from './ngapp/services/latlngFilter.js';
 
 /**
  * These don't need to be imported here because they are automatically included by the node dependency system whereever imported within the ngapp

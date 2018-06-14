@@ -48,6 +48,7 @@
 		</form>
 	</section>
 	<section ng-show="panel == 1000">
+		<code style="white-space: pre;" ng-show="keypair.private" ng-bind="keypair.public"></code>
 		<p>The data has been submitted.</p>
 		<div class="column" style="text-align: right;"><button ng-click="closeThisDialog()">Close</button></div>
 	</section>

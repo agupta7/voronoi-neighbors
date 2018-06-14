@@ -1,15 +1,9 @@
 import ngapp from '../../ngappmodule.js';
 import crypto from '../../services/crypto.js';
-import {RSAKey} from 'jsrsasign';
 
 const DIRECTIVE_NAME = 'rsaKey';
 
 var rsaKeyDdoFactory = [crypto.toString(), function (crypto) {
-	// The default text formatter in ngModelController uses the object's toString() method
-	// override RSAKey toString
-	RSAKey.prototype.toString = function () {
-		return crypto.keyToPEM(this);
-	};
 	return {
 		require: ['ngModel'],
 		link: {

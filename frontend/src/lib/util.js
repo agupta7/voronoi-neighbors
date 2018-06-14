@@ -7,6 +7,7 @@ var util = {
 	'hexStringToBytes': hexStringToBytes,
 	'bytesToHexString': bytesToHexString,
 	'bytesToString': bytesToString,
+	'base64ToBytes': base64ToBytes,
 	'Uint8': _Uint8,
 	'diffArrays': diffArrays
 }
@@ -60,10 +61,10 @@ function bytesToString(bytes) {
 
 function numToBytes(num) {
 	var bytes = [];
-	while (num > 0) {
+	do {
 		bytes.unshift(num % 256);
 		num = num >> 8;
-	}
+	} while (num > 0)
 	return _Uint8(bytes);
 }
 function floatToBytes(doub) {
@@ -91,6 +92,10 @@ function bytesToHexString(bytes) {
 		var str = byte.toString(16);
 		return str.length % 2 ? ('0' + str) : str;
 	}).join('');
+}
+
+function base64ToBytes(base64Str) {
+	return stringToBytes(atob(base64Str));
 }
 
 function _Uint8(arr) {
