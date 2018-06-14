@@ -5,7 +5,9 @@ from flask import Request
 from flask import request
 import psycopg2
 import json
-import knn
+import queries
+import dataowner
+import serviceProvider
 import key_management as km
 
 connection = psycopg2.connect(host='localhost', port=5432, database="voronoi_neighbors", user="voronoi_neighbors", password="voronoi")
@@ -14,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/pois', methods=['GET'])
 def allPOIs():
-	records = knn.allPois(connection)
+	records = dataowner.allPois(connection)
 	response = Response(json.dumps(records), mimetype='application/json')
 	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
 	return response
@@ -22,27 +24,9 @@ def allPOIs():
 @app.route('/updatePois', methods=['POST'])
 def updatePOIs():
 	js = request.get_json()
-	knn.uploadData(connection, js)
+	dataowner.uploadData(connection, js)
 	response = Response('pass', mimetype='text/plain')
 	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
-	return response
-
-@app.route('/malicious/changes', methods=['POST'])
-def maliciousUpdate():
-	js = request.get_json()
-	knn.maliciousUploadData(connection, js)
-	response = Response('pass', mimetype='text/plain')
-	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
-	return response
-
-@app.route('/nearestNeighbors')
-def nearestNeighbors():
-	js = request.args
-
-	obj = knn.nearestNeighbors(connection, json.loads(js['origin']), js.get('range_meters', None) and int(js['range_meters']), js.get('k', None) and int(js['k']))
-	response = Response(json.dumps(obj), mimetype='application/json')
-	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
-
 	return response
 
 @app.route('/publicKey', methods=['POST', 'GET'])
@@ -62,6 +46,24 @@ def publicKey():
 	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
 	return response
 
+@app.route('/malicious/changes', methods=['POST'])
+def maliciousUpdate():
+	js = request.get_json()
+	serviceProvider.maliciousUploadData(connection, js)
+	response = Response('pass', mimetype='text/plain')
+	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
+	return response
+
+@app.route('/nearestNeighbors')
+def nearestNeighbors():
+	js = request.args
+
+	obj = queries.nearestNeighbors(connection, json.loads(js['origin']), js.get('range_meters', None) and int(js['range_meters']), js.get('k', None) and int(js['k']))
+	response = Response(json.dumps(obj), mimetype='application/json')
+	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
+
+	return response
+
+
 if __name__ == '__main__':
-	#print knn.nearestNeighbors(connection, json.loads('{"lat":32.608357,"lng":-85.481163}'), int('500'), int('3'))
 	app.run(host='0.0.0.0', port=8087)
