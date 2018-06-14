@@ -1,8 +1,9 @@
 <div class="container">
 	<section ng-show="!panel">
-		<p>While the service provider can manipulate the values of the records in the database and add/remove records entirely, the voronoi neighborhood metadata ensures that addition or removal of records can not happen without changing other existing records.
+		<p>While the service provider can manipulate the values of the records in the database and add/remove records entirely, the Voronoi neighborhood metadata ensures that addition or removal of records can not happen without changing other existing records.
 		Furthermore, this metadata is signed using the data owner's RSA private key, making changes impossible to miss by the end user.  On the next screen, you can give a private key which will be used resign the changed meta data.  However, as you will see on the end-user tab, this change in the signing key is still detectable, meaning the service provider can not change any part of the location database without it being detected.</p>
 
+		<label><input type="checkbox" ng-change="$ctrl.voronoiChangesToggled(recalculateVoronoi)" ng-model="recalculateVoronoi">Re-calculate Voronoi neighborhood information to prevent geometric verification failture</label>
 		<h4>Number of malicious changes that will be sent:</h4>
 		changes / additions : {{diff.changed.length || 0}}<br>
 		removals : {{diff.deleted.length || 0}}

@@ -14,13 +14,17 @@
 			<button type="button" ng-click="$ctrl.nearestNeighbors(centerLatLng, range, k)">Search for nearest restaurants</button>
 			<div ng-show="nNeighbors.length">
 				<h2>Signature verification<span ng-show="cryptographicVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="cryptographicVerification === false"> - Failed</span></h2>
-				<p>
+				<p style="margin-top: -1rem; text-align: justify;">
 					The first step in verifying results involves doing a signature check.  The results from the service provider contain, for each record, some verification data (called a verification object) that is cryptographically signed by the data owner.
 					The end-user's app contains the embedded public key necessary to verify this signature.
 					The signature verification step is common across all query types and ensures that the service provider did not modify the contents of any of the records returned.
 					This is a necessary but insufficient check for ensuring that the service provider is processing queries faithfully.  Notably, signature verification does not detect maliciously added or removed records.
 				</p>
 				<h2>Geometric verification<span ng-show="geometricVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="geometricVerification === false"> - Failed</span></h2>
+				<p style="margin-top: -1rem; text-align: justify;">
+					The second step is geomteric verfication.  We use the Voronoi neighborhood information from the returned records, verified to be authentic due to signature verification,
+					to ensure that none of the neighbors of the returned points were closer, meaning that such a neighbor of a point would actually be that k-th nearest neighbor.
+				</p>
 			</div>
 		</div>
 		<div class="column" ng-init="centerLatLng = AUBURN_DOWNTOWN">
