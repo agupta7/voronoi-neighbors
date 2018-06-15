@@ -33,6 +33,12 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 	 * @param {*} k 
 	 */
 	service.geometricVerificationKnn = function geometricVerificationKnn(points, queryPoint, k) {
+		if (!points || !points.length) {
+			// we can't verify anything if nothing was returned
+			// for a Knn query, the only legitimate reason to return no records
+			// is if the dataowner has not added any points, making this entire exercise futile.
+			return null;
+		}
 		var visited = {};
 		var H = [];
 
@@ -56,8 +62,8 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 				}
 			}
 		}
-		for (var k in vorPointsMap) {
-			voronoiPoints.push(vorPointsMap[k]);
+		for (var key in vorPointsMap) {
+			voronoiPoints.push(vorPointsMap[key]);
 		}
 		sortByDistance(voronoiPoints, qp);
 		// check the the nearest neighbor
@@ -68,12 +74,6 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 		visited[pointKey(points[0])] = points[0];
 
 		for (i = 0; i < k-1; i++) {
-			if (!points[i] && H.length > 0) { // the server ran out of points to return (k was too high)
-			// checking H.length > 0 means that there were yet unvisited neighbors in the voronoi graph that could have returned by the server as kNN
-				return false;
-			} else {
-				return true;
-			}
 			n = points[i]._meta_.neighbors;
 			for (j = 0; j < n.length; j++) {
 				if (!(pointKey(n[j]) in visited)) {
@@ -81,8 +81,13 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 					H.push(n[j]);
 				}
 			}
+			
+			// the server ran out of points to return (k was too high)
+			if (!points[i+1] && H.length == 0)
+				return true;
 			sortByDistance(H, qp);
-			if (points[i+1] != H.shift())
+			// checking H.length > 0 means that there were yet unvisited neighbors in the voronoi graph that could have returned by the server as kNN
+			if (!points[i+1] && H.length > 0 || pointKey(points[i+1]) != pointKey(H.shift()))
 				return false;
 		}
 
