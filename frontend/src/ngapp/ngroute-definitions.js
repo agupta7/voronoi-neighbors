@@ -1,23 +1,25 @@
 import ng from 'angular';
 import ngapp from './ngappmodule.js'
+import settingsService from './services/settings.js';
 
 var routes = {
 	'/': {
 		'html': '<home-component></home-component>',
-		'loader': require('./views/home/home-component.js'),
-		'resolve': {
-			'resolveKey': ['$q', function ($q) {
-				return '';
-			}]
-		}
+		'loader': require('./views/home/home-component.js')
 	},
 	'/data-owner': {
 		'html': '<dataowner-component></dataowner-component>',
 		'loader': require('./views/dataowner/dataowner-component.js')
 	},
 	'/service-provider': {
-		'html': '<service-provider-component></service-provider-component>',
-		'loader': require('./views/service-provider/service-provider-component.js')
+		'html': '<service-provider-component settings="$resolve.settings"></service-provider-component>',
+		'loader': require('./views/service-provider/service-provider-component.js'),
+		'resolve': {
+			'settings': [settingsService.toString(), function (settingsService) {
+				// value of this promise will be made available in the controller's $scope.$resolve map's 'settings' key
+				return settingsService.getSettings();
+			}]
+		}
 	},
 	'/end-user': {
 		'html': '<end-user-component></end-user-component>',
@@ -105,6 +107,10 @@ function delayCompileDirective($compile) {
 	
 	function postLink (scope, element, attrs) {
 		var $resolve = scope.$resolve;
+		// routeComponentResolver gets the value of $resolve.routeComponent
+		// routeComponentResolver uses webpack's require function to resolve the route's template
+		// this happens either synchronously or asynchronously
+		// either way, 'requiring' a js file in webpack returns an object with the exported modules, where .default is the value of 'export default...'
 		var resolvedComponentDef = $resolve.routeComponent.default;
 		
 		var linked = $compile(originalHtml)(scope);

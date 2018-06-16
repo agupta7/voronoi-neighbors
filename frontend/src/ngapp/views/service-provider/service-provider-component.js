@@ -1,14 +1,23 @@
 import ng from 'angular';
 import ngapp from '../../ngappmodule.js';
 import dataService from '../../services/data.js';
+import settingsService from '../../services/settings.js';
 import util from '../../services/util.js';
 import maliciousSignatureModalController from './maliciousSignatureModalController.js';
 
 const COMPONENT_NAME = 'serviceProviderComponent';
 
 var def = {
-	controller: ['$scope', '$q', util.toString(), dataService, 'ngDialog', function ($scope, $q, util, dataService, ngDialog) {
+	controller: ['$scope', '$q', util.toString(), dataService, settingsService.toString(), 'ngDialog', function ($scope, $q, util, dataService, settingsService, ngDialog) {
 		var $ctrl = this;
+
+		// called by angularjs as a part of component life-cycle management
+		$ctrl.$onInit = function $onInit() {
+			var settings = $ctrl.settings; // comes from the component's bindings definition
+			
+			$scope.dropRecordsRandom = !!settings.dropRecordsRandom; 
+			$scope.modifyRecordsRandom = !!settings.modifyRecordsRandom;
+		};
 
 		$q.all([dataService.getPoints()]).then(function (resolves) {
 			var points = resolves[0];
@@ -31,14 +40,26 @@ var def = {
 				controllerAs: '$ctrl'
 			});
 		};
+
+		$ctrl.modifyRecordsRandomChanged = function modifyRecordsRandomChanged(modifyRecordsRandom) {
+			settingsService.saveSettings({
+				'modifyRecordsRandom': !!modifyRecordsRandom
+			});
+		};
+		$ctrl.dropRecordsRandomChanged = function dropRecordsRandomChanged(dropRecordsRandom) {
+			settingsService.saveSettings({
+				'dropRecordsRandom': !!dropRecordsRandom
+			});
+		};
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
 		templateUrl: require('./service-provider.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
-		scope: {
-
+		bindings: {
+			// passed in by the template of this component defined in ngroute-definitions
+			'settings': '='
 		}
 	},
 	componentName: COMPONENT_NAME

@@ -46,6 +46,20 @@ def publicKey():
 	response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
 	return response
 
+@app.route('/settings', methods=['PUT', 'GET'])
+def settings():
+	if request.method == 'GET':
+		settings = serviceProvider.getSettings(connection)
+		response = Response(json.dumps(settings), mimetype='application/json')
+		response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
+
+	elif request.method == 'PUT':
+		js = request.get_json()
+		response = Response(serviceProvider.saveSettings(connection, js) and 'pass', mimetype='application/json')
+		response.headers['Access-Control-Allow-Origin'] = CROSS_ORIGIN_ALLOW
+
+	return response
+
 @app.route('/malicious/changes', methods=['POST'])
 def maliciousUpdate():
 	js = request.get_json()

@@ -1,5 +1,9 @@
 <div class="container">
 	<h1>Service Provider View</h1>
+	<section>
+		<label><input type="checkbox" ng-model="dropRecordsRandom" ng-change="$ctrl.dropRecordsRandomChanged(dropRecordsRandom)">Randomly drop points from results</label>
+		<label><input type="checkbox" ng-model="modifyRecordsRandom" ng-change="$ctrl.modifyRecordsRandomChanged(modifyRecordsRandom)">Randomly return wrong points as k-nearest neighbors</label>
+	</section>
 	<table id="pois">
 		<thead>
 			<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>
