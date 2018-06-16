@@ -16,6 +16,10 @@ var def = {
 		$scope.keypair = keypair;
 		$scope.diff = util.diffArrays($scope.POIsCopy, $scope.POIs, poiEqualityComparator, keyFunction);
 
+		$ctrl.generateMatchingKey = function generateMatchingKey(rsaPrivateKey) {
+			return crypto.getRSAPublicKey(rsaPrivateKey);
+		};
+
 		$ctrl.submit =function submit(diff, rsaPrivateKey) {
 			dataService.sendMaliciousChanges(diff, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;

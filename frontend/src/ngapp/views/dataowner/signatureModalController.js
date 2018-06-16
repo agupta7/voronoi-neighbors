@@ -13,6 +13,10 @@ var def = {
 		var keypair = crypto.generateKeys();
 		$scope.keypair = keypair;
 
+		$ctrl.generateMatchingKey = function generateMatchingKey(rsaPrivateKey) {
+			return crypto.getRSAPublicKey(rsaPrivateKey);
+		};
+
 		$ctrl.submit =function submit(points, rsaPrivateKey) {
 			dataService.sendPoints(points, null, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;

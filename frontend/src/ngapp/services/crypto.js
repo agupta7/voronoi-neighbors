@@ -3,11 +3,6 @@ import util from './util.js';
 import ngapp from '../ngappmodule.js';
 
 const SERVICE_NAME = 'crypto';
-
-window.MessageDigest = MessageDigest;
-window.KEYUTIL = KEYUTIL;
-window.RSAKey = RSAKey;
-window.KJUR = KJUR;
 	
 var serviceFactory = [util.toString(), function (util) {
 	// assert(KJUR.crypto.MessageDigest == MessageDigest);
@@ -21,6 +16,24 @@ var serviceFactory = [util.toString(), function (util) {
 		cryptoHash.updateString(str);
 		
 		return cryptoHash.digest();
+	};
+	/**
+	 * 
+	 * Code inspired from jsrsasign's source of KEYUTIL.generateKeypair(...) function : http://kjur.github.io/jsrsasign/api/symbols/src/keyutil-1.0.js.html
+	 * @param {*} rsaPrivateKey 
+	 */
+	service.getRSAPublicKey = function getRSAPublicKey(rsaPrivateKey) {
+		if (rsaPrivateKey == null)
+			return null;
+		else if (!rsaPrivateKey)
+			return undefined;
+		var pk = new RSAKey();
+
+		pk.setPublic(rsaPrivateKey.n.toString(16), rsaPrivateKey.e.toString(16));
+		pk.isPrivate = false;
+		pk.isPublic = true;
+
+		return pk;
 	};
 	service.sign = function signSHA256(str, rsaPrivateKey) {
 		var sig = new KJUR.crypto.Signature({'alg': 'SHA256withRSA'});
@@ -67,12 +80,13 @@ var serviceFactory = [util.toString(), function (util) {
 			'public': keypair.pubKeyObj
 		};
 	};
-	service.keyToPEM = function (keyObj) {
+	service.keyToPEM = function (keyObj, format) {
+		var ku = KEYUTIL;
 		if (!keyObj)
 			return null;
 		if (keyObj.isPrivate)
-			return KEYUTIL.getPEM(keyObj, 'PKCS8PRV');
-		else
+			return KEYUTIL.getPEM(keyObj, format || 'PKCS8PRV');
+		else // jsrsasign only supports the following method signature for public key.  It returns it in PKCS#8/SubjectPublicKeyInfo format
 			return KEYUTIL.getPEM(keyObj);
 	};
 	service.readPEM = function (pemKeyString) {
@@ -94,10 +108,15 @@ var serviceFactory = [util.toString(), function (util) {
 				// as of RFC-5958, PKCS8 can be used for public keys also: https://crypto.stackexchange.com/questions/35093/why-ssh-gen-makes-difference-between-pem-and-pkcs8
 				k.readPKCS8PubKeyHex(encodedDERHex);
 		} else {
-			try {
+			if (/-----BEGIN\s+RSA/i.test(pemKeyString)) {
 				k.readPrivateKeyFromPEMString(pemKeyString);
-			} catch (e) {
-				k.readPKCS8PrvKeyHex(util.bytesToHexString(util.stringToBytes(atob(split.join('')))));
+			} else {
+				try {
+					k.readPKCS8PrvKeyHex(util.bytesToHexString(util.stringToBytes(atob(split.join('')))));
+				} catch (e) {
+					// atob will throw an exception
+					return undefined;
+				}
 			}
 		}
 

@@ -39,7 +39,7 @@
 	<section ng-show="panel == 2">
 		<form name="signingForm" ng-submit="$ctrl.submit(POIs, keypair.private)">
 			<div class="row">
-				<div class="column"><textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" required ng-model="keypair.private" rsa-key placeholder="Enter private key as hex string"></textarea></div>
+				<div class="column"><textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" required ng-model="keypair.private" rsa-key ng-change="keypair.public = $ctrl.generateMatchingKey(keypair.private)" placeholder="Enter private key as hex string"></textarea></div>
 			</div>
 			<div class="row">
 					<div class="column"><button ng-click="panel = 1">Back</button></div>
