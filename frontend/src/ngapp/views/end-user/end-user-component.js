@@ -21,7 +21,7 @@ var def = {
 			dataService.getPublicKey('dataowner').then(function (result) {
 				nnPromise.then(function (neighbors) {
 					$scope.cryptographicVerification = verifierService.signatureVerification(neighbors, crypto.readPEM(result.publicKey));
-					$scope.geometricVerification = verifierService.geometricVerificationKnn(neighbors, originPoint, k);
+					$scope.geometricVerification = verifierService.geometricVerificationKnn(neighbors, originPoint, k, range);
 				});
 			});
 		};

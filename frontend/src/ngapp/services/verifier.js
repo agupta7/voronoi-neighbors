@@ -32,13 +32,15 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 	 * @param {*} queryPoint 
 	 * @param {*} k 
 	 */
-	service.geometricVerificationKnn = function geometricVerificationKnn(points, queryPoint, k) {
+	service.geometricVerificationKnn = function geometricVerificationKnn(points, queryPoint, k, range) {
 		if (!points || !points.length) {
 			// we can't verify anything if nothing was returned
 			// for a Knn query, the only legitimate reason to return no records
 			// is if the dataowner has not added any points, making this entire exercise futile.
 			return null;
 		}
+		k = k == null ? Number.POSITIVE_INFINITY : k;
+		range = range == null ? Number.POSITIVE_INFINITY : range;
 		var visited = {};
 		var H = [];
 
@@ -49,22 +51,7 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 		});
 
 
-		var voronoiPoints = [];
-		var vorPointsMap = {};
-		for (var i = 0; i < points.length; i++) {
-			vorPointsMap[pointKey(points[i])] = points[i];
-			// since signature verification is done first, we can trust what the server says about neighbors
-			var n = points[i]._meta_.neighbors;
-			for (var j = 0; j < n.length; j++) {
-				var nKey = pointKey(n[j]);
-				if (!(nKey in vorPointsMap)) {
-					vorPointsMap[nKey] = n[j];
-				}
-			}
-		}
-		for (var key in vorPointsMap) {
-			voronoiPoints.push(vorPointsMap[key]);
-		}
+		var voronoiPoints = getAllVoronoiPoints(points);
 		sortByDistance(voronoiPoints, qp);
 		// check the the nearest neighbor
 		if (points[0] != voronoiPoints[0]) {// the first claimed kNN is not nearest to the query point when considering all neighbors
@@ -73,25 +60,56 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 		}
 		visited[pointKey(points[0])] = points[0];
 
-		for (i = 0; i < k-1; i++) {
-			n = points[i]._meta_.neighbors;
-			for (j = 0; j < n.length; j++) {
+		for (var i = 0; i < k-1; i++) {
+			var n = points[i]._meta_.neighbors;
+			for (var j = 0; j < n.length; j++) {
 				if (!(pointKey(n[j]) in visited)) {
 					visited[pointKey(n[j])] = n[j];
 					H.push(n[j]);
 				}
 			}
-			
+
 			// the server ran out of points to return (k was too high)
 			if (!points[i+1] && H.length == 0)
 				return true;
+			// H is min-heap queue in the paper.  So, we're sorting on every iteration to imitate that behavior
 			sortByDistance(H, qp);
 			// checking H.length > 0 means that there were yet unvisited neighbors in the voronoi graph that could have returned by the server as kNN
-			if (!points[i+1] && H.length > 0 || pointKey(points[i+1]) != pointKey(H.shift()))
+			if (!points[i+1] && H.length > 0) {
+				var dist = qp.distanceTo(CartesianPoint.fromLatLng(H[0].location));
+				if (dist <= range)
+					return false;
+				else // while there are more neighbors left in the voronoi graph, they are too far for the range criteria.  we can conclude true verification
+					return true;
+			}
+			else if (pointKey(points[i+1]) != pointKey(H.shift()))
 				return false;
+
+			if (!points[i+1])
+				break;
 		}
 
 		return true;
+
+		function getAllVoronoiPoints(pois) {
+			var voronoiPoints = [];
+			var vorPointsMap = {};
+			for (var i = 0; i < pois.length; i++) {
+				vorPointsMap[pointKey(pois[i])] = pois[i];
+				// since signature verification is done first, we can trust what the server says about neighbors
+				var n = pois[i]._meta_.neighbors;
+				for (var j = 0; j < n.length; j++) {
+					var nKey = pointKey(n[j]);
+					if (!(nKey in vorPointsMap)) {
+						vorPointsMap[nKey] = n[j];
+					}
+				}
+			}
+			for (var key in vorPointsMap) {
+				voronoiPoints.push(vorPointsMap[key]);
+			}
+			return voronoiPoints;
+		}
 
 		function sortByDistance(arr, qp) {
 			arr.sort(function (a, b) {
