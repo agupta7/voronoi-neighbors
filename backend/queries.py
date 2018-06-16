@@ -40,7 +40,9 @@ def nearestNeighbors(connection, origin, range_, k):
                                         ORDER BY random() LIMIT 1)
             '''
             cursor2.execute(query2, tuple(args2))
-            (id_, location, name, phone, address, neighborsBytes, verificationObjectHexStr, distanceOrigin) = cursor2.fetchone()
+            record = cursor2.fetchone()
+            if record is not None:
+                (id_, location, name, phone, address, neighborsBytes, verificationObjectHexStr, distanceOrigin) = record
             cursor2.close()
         pt = shapely.wkt.loads(location)
         lat = pt.y
