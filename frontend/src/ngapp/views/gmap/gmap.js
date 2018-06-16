@@ -9,7 +9,7 @@ gmapDirective.$inject = ['gmapsApiLoader'];
 function gmapDirective(gmapsApiLoader) {
 	var ddo = {
 			template: require('!raw-loader!./gmap.html'),
-			controller: DIRECTIVE_NAME + 'Controller',
+			controller: CONTROLLER_NAME,
 			controllerAs: '$ctrl',
 			require: DIRECTIVE_NAME,
 			scope: {
@@ -338,7 +338,7 @@ function gmapController($scope, $window, debounce) {
 }
 
 function doit() {
-	ngapp.controller(CONTROLLER_NAME, gmapController)
+	ngapp._controller(CONTROLLER_NAME, gmapController)
 	ngapp._directive(DIRECTIVE_NAME, gmapDirective);
 	return gmapDirective;
 }

@@ -5,9 +5,9 @@
 			<div style="display:flex;">
 				<label>
 					Origin point to search near:&nbsp;&nbsp;&nbsp;<img width="16" height="16" ng-src="{{originDot}}">
-					<input type="text" ng-model="centerAddress" placeholder="Currently {{centerLatLng | latlng }}">
+					<input type="text" gmap-ctrl="_gmapCtrl" gmap-place="centerLatLng" placeholder="Currently {{centerLatLng | latlng }}">
 				</label>
-				<button type="button" ng-click="$ctrl.geocode(centerAddress);" style="margin: 2.5rem 0 0 1rem;">Search</button>
+				<!-- <button type="button" ng-click="$ctrl.geocode(centerAddress);" style="margin: 2.5rem 0 0 1rem;">Search</button> -->
 			</div>
 			<label>Range (meters): <input type="number" ng-model="range" placeholder="Infinity" min="1"></label>
 			<label>Number of nearest neighbors: <input type="number" ng-model="k" placeholder="Infinity" min="1"></label>
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="column" ng-init="centerLatLng = AUBURN_DOWNTOWN">
-			<gmap style="display: block; height: 600px;" zoom="zoom" origin="centerLatLng" markers="nNeighbors" mark-neighbors="true" options="{'markersEditor': true, 'autoVoronoi': true}"></gmap>
+			<gmap style="display: block; height: 600px;" zoom="zoom" origin="centerLatLng" markers="nNeighbors" mark-neighbors="true" options="{'autoVoronoi': true}"></gmap>
 		</div>
 	</div>
 	<div class="row" ng-show="nNeighbors.length">

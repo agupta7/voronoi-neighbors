@@ -6,12 +6,16 @@ import crypto from '../../services/crypto.js';
 const COMPONENT_NAME = 'endUserComponent';
 
 var def = {
-	controller: ['$scope', '$q', 'gmapsApiLoader', dataService.toString(), verifierService.toString(), crypto.toString(), 
-	function ($scope, $q, gmapsApiLoader, dataService, verifierService, crypto) {
+	controller: ['$scope', dataService.toString(), verifierService.toString(), crypto.toString(), 
+	function ($scope, dataService, verifierService, crypto) {
 		var $ctrl = this;
 
 		$scope.AUBURN_DOWNTOWN = {lat: 32.608357, lng: -85.481163};
 		$scope.originDot = require('../../../images/Location_dot_blue.svg');
+
+		$scope.$on('gmapInitialized', function (event, gmapCtrl) {
+			$scope._gmapCtrl = gmapCtrl;
+		});
 
 		$ctrl.nearestNeighbors = function (originPoint, range, k) {
 			var nnPromise = dataService.nearestNeighbors(originPoint, range, k);
@@ -22,25 +26,6 @@ var def = {
 				nnPromise.then(function (neighbors) {
 					$scope.cryptographicVerification = verifierService.signatureVerification(neighbors, crypto.readPEM(result.publicKey));
 					$scope.geometricVerification = verifierService.geometricVerificationKnn(neighbors, originPoint, k, range);
-				});
-			});
-		};
-
-		$ctrl.geocode = function (address) {
-			return gmapsApiLoader.then(function (gmaps) {
-				return $q(function (resolve, reject) {
-					var geocoder = new gmaps.Geocoder();
-
-					geocoder.geocode({'address': address}, function (results, status) {
-						if (status == "OK") {
-							$scope.geocodes = results;
-							$scope.centerLatLng = {
-								'lat': results[0].geometry.location.lat(),
-								'lng': results[0].geometry.location.lng()
-							};
-							resolve($scope.centerLatLng);
-						}
-					});
 				});
 			});
 		};

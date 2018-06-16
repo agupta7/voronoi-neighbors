@@ -17,7 +17,7 @@ module.provider('gmapsApiLoader', [function () {
 		
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'https://maps.googleapis.com/maps/api/js?callback=initMapCallback&key=' + GMAPS_API_KEY;
+		script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMapCallback&key=' + GMAPS_API_KEY;
 		
 		return $q(function (resolver, rejector) {
 			$window.initMapCallback = function () {
