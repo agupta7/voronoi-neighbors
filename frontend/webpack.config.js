@@ -52,7 +52,10 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			},
 			plugins: [
 				new webpack.DefinePlugin({
-					'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend']))
+					'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend'])),
+					'__WEBPACK__PACKAGE_VERSION': JSON.stringify(package_json.version),
+					'__WEBPACK__AUTHOR': JSON.stringify(package_json.author),
+					'__WEBPACK__APP_REPOSITORY': JSON.stringify(package_json.homepage)
 				}),
 				new CopyWebpackPlugin([{
 					from: __dirname + '/src/webpack.copy'

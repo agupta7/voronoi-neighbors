@@ -1,8 +1,9 @@
 {
   "name": "voronoi-frontend",
-  "version": "0.1.0",
-  "description": "The frontend to the k nearest neighbors project based on Voronoi cells.",
-  "main": "webpack.config.js",
+  "version": "0.9.1",
+  "description": "A demo of the concept behind the IEEE paper Spatial Query Integrity with Voronoi Neighbors",
+  "homepage": "https://github.com/agupta7/voronoi-neighbors/tree/master/frontend",
+  "main": "express-spa.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm-run-all build serveprod",
@@ -21,7 +22,10 @@
     "dist": 8080,
     "backend": 8081
   },
-  "author": "",
+  "author": {
+    "name": "Anuj Gupta",
+    "email": "azg0076@tigermail.auburn.edu"
+  },
   "license": "ISC",
   "dependencies": {
     "angular": "^1.6.5",

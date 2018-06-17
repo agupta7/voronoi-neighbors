@@ -3,13 +3,19 @@
 <!-- ng-app tag should stay in sync with NG_APP_NAME in ngapp/ngapp.js -->
 <html ng-app="voronoi" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Spatial Query Integrity Assurance Demo</title>
-  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="/">
+	<meta charset="UTF-8">
+	<title>Spatial Query Integrity with Voronoi Neighbors Demo</title>
+	<link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript">
+		function githubButtonFailed(element) {
+			var url = element.getAttribute("data-fork-address");
+			element.outerHTML = "<a href=\"" + url + "\">Fork</a>";
+		}
+	</script>
+	<base href="/">
 </head>
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
 	<nav id="top-nav">
 		<ul>
 			<li active-class-route="/"><a href="/">Home</a></li>
@@ -19,8 +25,18 @@
 			<li active-class-route="/credits"><a href="/credits">Credits</a></li>
 		</ul>
 	</nav>
-	<section id="main">
+	<section style="flex: 1;" id="main">
 		<ng-view class="inner"></ng-view>
 	</section>
+	<footer style="margin-top: 3rem; text-align: right; padding: 1.5rem 1rem;">
+		v{{::APP.version}} created by <a href="mailto:{{::APP.author.email}}">{{::APP.author.name}}</a> &copy; 2018.
+		Source code released under <a target="_blank" href="https://github.com/{{::APP.github.user}}/{{::APP.github.repo}}/blob/master/LICENSE">Apache license</a>.
+		&nbsp;&nbsp;&nbsp;<iframe 
+					onerror="githubButtonFailed(this)" 
+					data-fork-address="https://github.com/{{::APP.github.user}}/{{::APP.github.repo}}/fork" 
+					src="https://ghbtns.com/github-btn.html?user=agupta7&repo=voronoi-neighbors&type=fork" 
+					frameborder="0" scrolling="0" style="height: 2rem; width: 5rem; position: relative; top: 0.4rem;">
+		</iframe> on <a target="_blank" href="{{::APP.repository}}">Github</a>
+	</footer>
 </body>
 </html>

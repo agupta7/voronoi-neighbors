@@ -15,8 +15,12 @@ import 'ng-dialog/css/ngDialog-theme-default.css';
 //import './styles/main.css';
 
 import ngapp from './ngapp/ngappmodule.js';
+
 // from DefinePlugin in webpack.config.json)
-ngapp._value('API_URL_BASE', __WEBPACK__API_URL_BASE); 
+ngapp._value('API_URL_BASE', __WEBPACK__API_URL_BASE);
+ngapp._value('APP_VERSION', __WEBPACK__PACKAGE_VERSION);
+ngapp._value('APP_AUTHOR', __WEBPACK__AUTHOR);
+ngapp._value('APP_REPOSITORY', __WEBPACK__APP_REPOSITORY);
 
 // Directives that can be used anywhere in HTML
 import {delayCompileDirective}  from './ngapp/ngroute-definitions.js';

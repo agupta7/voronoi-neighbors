@@ -41,4 +41,21 @@ ngappmodule.config(["$compileProvider", "$controllerProvider", "$provide", funct
 	ngappmodule._directive = $compileProvider.directive.bind($compileProvider);
 }]);
 
+/**
+ * APP_VERSION : Comes as a value defined in webpack-entry.js
+ * APP_AUTHOR : Comes as an object defined in webpack-entry.js
+ * 	Has two keys - 'name' and 'email'
+ */
+ngappmodule.run(["$rootScope", "APP_VERSION", "APP_AUTHOR", "APP_REPOSITORY", function ($rootScope, APP_VERSION, APP_AUTHOR, APP_REPOSITORY) {
+	$rootScope.APP = {
+		"version": APP_VERSION,
+		"author": APP_AUTHOR,
+		"repository": APP_REPOSITORY,
+		"github": {
+			"user": "agupta7",
+			"repo": "voronoi-neighbors"	
+		}
+	};
+}]);
+
 export default ngappmodule;
