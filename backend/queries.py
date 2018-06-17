@@ -69,4 +69,4 @@ def nearestNeighbors(origin, k, range_, connection):
 
 def getMaliciousSettings(connection):
     settings = serviceProvider.getSettings(connection)
-    return (settings['dropRecordsRandom'], settings['modifyRecordsRandom'])
+    return (settings.get('dropRecordsRandom', False), settings.get('modifyRecordsRandom', False))
