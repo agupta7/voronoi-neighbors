@@ -19,7 +19,7 @@
     "dev": 8888,
     "debug": 8080,
     "dist": 8080,
-    "backend": 8087
+    "backend": 8081
   },
   "author": "",
   "license": "ISC",

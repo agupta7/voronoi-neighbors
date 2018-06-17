@@ -115,7 +115,7 @@ if __name__ == '__main__':
     parser.add_argument('--dbuser', help='Name of database user', required=True)
     parser.add_argument('--dbpassword', help='Database password', required=True)
     parser.add_argument('--dbname', help='Name of database on Postgres server [=dbuser]', default=None, required=False)
-    parser.add_argument('--port', help='Port on which to host the web service [8081]', default=8087, type=int)
+    parser.add_argument('--port', help='Port on which to host the web service [8081]', default=8081, type=int)
 
     args = parser.parse_args()
     main(args.dbhost, args.dbport, args.dbname or args.dbuser, args.dbuser, args.dbpassword, args.port)
