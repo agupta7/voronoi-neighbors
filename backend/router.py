@@ -98,14 +98,13 @@ def _responseHeaders(response):
     return response
 
 def _retry(func, retries):
+    global connection
     for i in range(retries):
         try:
             return func(connection=connection)
         except (psycopg2.OperationalError, psycopg2.InterfaceError) as err:
             if i == retries - 1:
                 raise
-            global connection
-            print 'reconnecting'
             connection = psycopg2.connect(DB_CONNECTION_STRING)
 
 if __name__ == '__main__':
