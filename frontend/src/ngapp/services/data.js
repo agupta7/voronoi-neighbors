@@ -90,8 +90,8 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 				'neighbors': (point.neighbors || []).map(function (neighbor) {
 					return {
 						'location': {
-							'lat': neighbor.lat,
-							'lng': neighbor.lng
+							'lat': neighbor.lat || neighbor.location.lat,
+							'lng': neighbor.lng || neighbor.location.lng
 						}
 					};
 				})

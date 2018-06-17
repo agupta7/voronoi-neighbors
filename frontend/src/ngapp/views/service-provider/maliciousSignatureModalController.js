@@ -21,6 +21,26 @@ var def = {
 		};
 
 		$ctrl.submit =function submit(diff, rsaPrivateKey) {
+			for (var i = 0; i < diff.changed.length; i++) {
+				var point = diff.changed[i];
+				if (!point.location) {
+					point.location = {
+						'lat': point.lat,
+						'lng': point.lng
+					};
+				}
+				point.neighbors = point['_meta_']['neighbors'];
+			}
+			for (i = 0; i < diff.deleted.length; i++) {
+				var point = diff.deleted[i];
+				if (!point.location) {
+					point.location = {
+						'lat': point.lat,
+						'lng': point.lng
+					};
+				}
+				point.neighbors = point['_meta_']['neighbors']; // for attachPoiMetadata in data service
+			}
 			dataService.sendMaliciousChanges(diff, rsaPrivateKey).then(function () {
 				$scope.panel = 1000;
 			});
@@ -45,15 +65,13 @@ var def = {
 						if (!cell.owner._meta_.neighborsDataowner)
 							cell.owner._meta_.neighborsDataowner = cell.owner._meta_.neighbors;
 						cell.owner._meta_.neighbors = neighborCells.map(function (cell) {
-							if (!cell.owner.location) {
-								cell.owner.location = {
-									'lat': cell.owner.lat,
-									'lng': cell.owner.lng
-								};
-							}
-							return cell.owner;
+							return {
+								'location': {
+									'lat': cell.owner.lat || cell.owner.location.lat,
+									'lng': cell.owner.lng || cell.owner.location.lng
+								}
+							};
 						});
-						cell.owner.neighbors = cell.owner._meta_.neighbors;
 						cell.owner._meta_.neighborsServiceProvider = cell.owner._meta_.neighbors;
 					}
 
