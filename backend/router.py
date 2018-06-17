@@ -25,7 +25,7 @@ def main(dbhost, dbport, dbname, dbuser, dbpassword, webservicePort):
     global connection
     DB_CONNECTION_STRING = 'host=%s port=%s dbname=%s user=%s password=%s' % (dbhost, dbport, dbname, dbuser, dbpassword)
     connection = psycopg2.connect(DB_CONNECTION_STRING)
-    app.run(host='0.0.0.0', port=webservicePort)
+    app.run(host='0.0.0.0', port=webservicePort, processes=True)
 
 @app.route('/pois', methods=['GET'])
 def allPOIs():
