@@ -42,60 +42,60 @@ def maliciousUploadData(connection, diff):
     connection.commit()
     cursor.close()
 
-def saveSettings(connection, settings):
-	dropRecords = settings.get('dropRecordsRandom')
-	modifyRecords = settings.get('modifyRecordsRandom')
-	cursor = connection.cursor()
-	if dropRecords is not None:
-		sql = '''WITH vals (key, value)
-		            as (
-							values ('dropRecordsRandom', %s)
-						),
-					update_result as (
-						UPDATE settings s set
-								value = vals.value
-						FROM vals
-						WHERE s.key = vals.key
-						RETURNING s.*
-					)
-					INSERT INTO settings (key, value)
-					SELECT vals.key, vals.value
-					FROM vals
-					WHERE NOT EXISTS (SELECT 1 FROM update_result WHERE update_result.key = vals.key)
-		'''
-		cursor.execute(sql, (str(dropRecords),))
-	
-	if modifyRecords is not None:
-		sql = '''WITH vals (key, value)
-		            as (
-							values ('modifyRecordsRandom', %s)
-						),
-					update_result as (
-						UPDATE settings s set
-								value = vals.value
-						FROM vals
-						WHERE s.key = vals.key
-						RETURNING s.*
-					)
-					INSERT INTO settings (key, value)
-					SELECT vals.key, vals.value
-					FROM vals
-					WHERE NOT EXISTS (SELECT 1 FROM update_result WHERE update_result.key = vals.key)
-		'''
-		cursor.execute(sql, (str(modifyRecords),))
+def saveSettings(settings, connection):
+    dropRecords = settings.get('dropRecordsRandom')
+    modifyRecords = settings.get('modifyRecordsRandom')
+    cursor = connection.cursor()
+    if dropRecords is not None:
+        sql = '''WITH vals (key, value)
+                    as (
+                            values ('dropRecordsRandom', %s)
+                        ),
+                    update_result as (
+                        UPDATE settings s set
+                                value = vals.value
+                        FROM vals
+                        WHERE s.key = vals.key
+                        RETURNING s.*
+                    )
+                    INSERT INTO settings (key, value)
+                    SELECT vals.key, vals.value
+                    FROM vals
+                    WHERE NOT EXISTS (SELECT 1 FROM update_result WHERE update_result.key = vals.key)
+        '''
+        cursor.execute(sql, (str(dropRecords),))
+    
+    if modifyRecords is not None:
+        sql = '''WITH vals (key, value)
+                    as (
+                            values ('modifyRecordsRandom', %s)
+                        ),
+                    update_result as (
+                        UPDATE settings s set
+                                value = vals.value
+                        FROM vals
+                        WHERE s.key = vals.key
+                        RETURNING s.*
+                    )
+                    INSERT INTO settings (key, value)
+                    SELECT vals.key, vals.value
+                    FROM vals
+                    WHERE NOT EXISTS (SELECT 1 FROM update_result WHERE update_result.key = vals.key)
+        '''
+        cursor.execute(sql, (str(modifyRecords),))
 
-	connection.commit()
-	cursor.close()
+    connection.commit()
+    cursor.close()
 
 def getSettings(connection):
-	cursor = connection.cursor()
-	result = dict()
+    cursor = connection.cursor()
+    result = dict()
 
-	sql = '''SELECT s.key, s.value FROM settings s WHERE s.key in ('dropRecordsRandom', 'modifyRecordsRandom')'''
-	cursor.execute(sql)
+    sql = '''SELECT s.key, s.value FROM settings s WHERE s.key in ('dropRecordsRandom', 'modifyRecordsRandom')'''
+    cursor.execute(sql)
 
-	for key, value in cursor:
-		result[key] = bool(True if value == 'True' else False)
+    for key, value in cursor:
+        result[key] = bool(True if value == 'True' else False)
 
-	cursor.close()
-	return result
+    cursor.close()
+    return result

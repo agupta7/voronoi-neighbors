@@ -29,7 +29,7 @@ def allPois(connection):
 
     return records
 
-def uploadData(connection, records):
+def uploadData(records, connection):
     cursor = connection.cursor()
     cursor.execute('TRUNCATE TABLE POIs;')
     for record in records:

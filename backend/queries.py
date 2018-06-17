@@ -4,7 +4,7 @@ import struct
 import serviceProvider
 import random
 
-def nearestNeighbors(connection, origin, range_, k):
+def nearestNeighbors(origin, k, range_, connection):
     (dropRecordsRandom, modifyRecordsRandom) = getMaliciousSettings(connection)
     random.seed()
     pt = Point(origin['lng'], origin['lat'])
