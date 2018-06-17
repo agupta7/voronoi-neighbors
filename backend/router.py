@@ -54,7 +54,7 @@ def publicKey():
 
     elif request.method == 'POST':
         js = request.get_json()
-        response = Response(km.savePublicKey(connection, js['source'], js['publicKey']), mimetype='application/json')
+        response = Response(_retry(functools.partial(km.savePublicKey, js['source'], js['publicKey']), DB_RETRIES), mimetype='application/json')
 
     _responseHeaders(response)
     return response
