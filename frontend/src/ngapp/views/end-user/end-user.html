@@ -9,9 +9,9 @@
 				</label>
 				<!-- <button type="button" ng-click="$ctrl.geocode(centerAddress);" style="margin: 2.5rem 0 0 1rem;">Search</button> -->
 			</div>
-			<label>Range (meters): <input type="number" ng-model="range" placeholder="Infinity" min="1"></label>
 			<label>Number of nearest neighbors: <input type="number" ng-model="k" placeholder="Infinity" min="1"></label>
-			<button type="button" ng-click="$ctrl.nearestNeighbors(centerLatLng, range, k)">Search for nearest restaurants</button>
+			<label>Range (meters): <input type="number" ng-model="range" placeholder="Infinity" min="0" step="100"></label>
+			<button type="button" ng-click="$ctrl.nearestNeighbors(centerLatLng, k, range)">Search for nearest restaurants</button>
 			<div ng-show="nNeighbors.length">
 				<h2>Signature verification<span ng-show="cryptographicVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="cryptographicVerification === false"> - Failed</span></h2>
 				<p style="margin-top: -1rem; text-align: justify;">

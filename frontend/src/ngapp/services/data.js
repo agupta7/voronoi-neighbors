@@ -52,7 +52,7 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		return $http.post(API_URL_BASE + '/malicious/changes', diff);
 	};
 
-	service.nearestNeighbors = function nearestNeighbors(originPoint, range, k) {
+	service.nearestNeighbors = function nearestNeighbors(originPoint, k, range) {
 		return $http.get(API_URL_BASE + "/nearestNeighbors", {
 			'params': {
 				'origin': originPoint,

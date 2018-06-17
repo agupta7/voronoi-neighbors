@@ -16,6 +16,8 @@ ngappmodule.config(["$locationProvider", function ($locationProvider) {
 	$locationProvider.html5Mode(true);
 }]);
 
+ngappmodule.value('AUBURN_DOWNTOWN', {lat: 32.606562317045885, lng: -85.48174055491711});
+
 ngappmodule._controller = ngappmodule.controller;
 ngappmodule._service = ngappmodule.service;
 ngappmodule._factory = ngappmodule.factory;

@@ -8,7 +8,7 @@ import signatureModalController from './signatureModalController.js';
 const COMPONENT_NAME = 'dataownerComponent';
 
 var def = {
-	controller: ['$scope', '$q', dataService, 'ngDialog', function ($scope, $q, dataService, ngDialog) {
+	controller: ['$scope', '$q', dataService, 'AUBURN_DOWNTOWN', 'ngDialog', function ($scope, $q, dataService, AUBURN_DOWNTOWN, ngDialog) {
 		var $ctrl = this;
 		$scope.AUBURN_DOWNTOWN = {lat: 32.608357, lng: -85.481163};
 		$scope['CartesianPoint'] = CartesianPoint;
@@ -27,6 +27,7 @@ var def = {
 			} else {
 				$scope.zoom = 16;
 			}
+
 		};
 		$ctrl.loadHardcoded = function () {
 			var POIs = $scope['POIs'] || ($scope['POIs'] = []);
