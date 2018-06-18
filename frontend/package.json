@@ -1,6 +1,6 @@
 {
   "name": "voronoi-frontend",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A demo of the concept behind the IEEE paper Spatial Query Integrity with Voronoi Neighbors",
   "homepage": "https://github.com/agupta7/voronoi-neighbors/tree/master/frontend",
   "main": "express-spa.js",
