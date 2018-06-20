@@ -2,6 +2,12 @@
 
 echo "Make sure the packages postgresql & postgis are installed: apt/yum/dnf install postgresql postgis"
 
+ME=`id -u`
+if [ "${ME}" != "0" ]; then
+	echo "Must be root to assume privileges of postgres user" 1>&2;
+	exit 1
+fi
+
 DB_NAME=$1
 PASSWORD=$2
 
@@ -15,7 +21,7 @@ fi
 
 USER="${DB_NAME}"
 
-sudo -u postgres psql << EOF
+su -l postgres -c "psql" << EOF
 
 DROP DATABASE IF EXISTS $DB_NAME;
 DROP USER IF EXISTS $USER;
