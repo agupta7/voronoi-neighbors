@@ -6,8 +6,8 @@ import crypto from '../../services/crypto.js';
 const COMPONENT_NAME = 'endUserComponent';
 
 var def = {
-	controller: ['$scope', dataService.toString(), verifierService.toString(), crypto.toString(), 'AUBURN_DOWNTOWN',
-	function ($scope, dataService, verifierService, crypto, AUBURN_DOWNTOWN) {
+	controller: ['$scope', '$window', dataService.toString(), verifierService.toString(), crypto.toString(), 'AUBURN_DOWNTOWN',
+	function ($scope, $window, dataService, verifierService, crypto, AUBURN_DOWNTOWN) {
 		var $ctrl = this;
 
 		$scope.AUBURN_DOWNTOWN = AUBURN_DOWNTOWN;
@@ -16,6 +16,22 @@ var def = {
 		$scope.$on('gmapInitialized', function (event, gmapCtrl) {
 			$scope._gmapCtrl = gmapCtrl;
 		});
+
+		$ctrl.geolocate = function geolocate() {
+			var navigator = $window.navigator;
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (position) {
+					var lat = position.coords.latitude;
+					var lng = position.coords.longitude;
+
+					$scope.centerLatLng = {
+						'lat': lat,
+						'lng': lng
+					};
+					$scope.$apply();
+				});
+			}
+		};
 
 		$ctrl.nearestNeighbors = function (originPoint, k, range) {
 			var nnPromise = dataService.nearestNeighbors(originPoint, k || null, range || null);

@@ -7,7 +7,9 @@
 					Origin point to search near:&nbsp;&nbsp;&nbsp;<img width="16" height="16" ng-src="{{originDot}}">
 					<input type="text" gmap-ctrl="_gmapCtrl" gmap-place="centerLatLng" placeholder="Currently {{centerLatLng | latlng }}">
 				</label>
-				<!-- <button type="button" ng-click="$ctrl.geocode(centerAddress);" style="margin: 2.5rem 0 0 1rem;">Search</button> -->
+				<div>
+				&nbsp;&nbsp;or <button type="button" ng-click="$ctrl.geolocate();" style="margin: 2.5rem 0 0 1rem;">Detect my location</button>
+				</div>
 			</div>
 			<label>Number of nearest neighbors: <input type="number" ng-model="k" placeholder="Infinity" min="1"></label>
 			<label>Range (meters): <input type="number" ng-model="range" placeholder="Infinity" min="0" step="100"></label>
