@@ -2,10 +2,9 @@ postgresql
 postgis
 pip
 python2.7
+virtualenv
 
 To build:
 -------------
 npm
 nodejs
-
-
