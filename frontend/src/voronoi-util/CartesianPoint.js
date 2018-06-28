@@ -67,7 +67,7 @@ CartesianPoint.prototype.toString = function toString() {
 }
 
 CartesianPoint.fromLatLng = function fromLatLng(latLng) {
-	const radius = 6371000; // meters
+	const radius = 6378137.0; // meters http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
 	var radians = CartesianPoint._latLngToRadians(latLng);
 
 	// https://vvvv.org/blog/polar-spherical-and-geographic-coordinates
