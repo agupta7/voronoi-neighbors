@@ -9,7 +9,7 @@ node_modules
 dist
 debug
 
-# pthon
+# python
 *.pyc
 
 # Logs
