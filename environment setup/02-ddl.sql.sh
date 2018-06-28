@@ -21,7 +21,7 @@ fi
 
 USER="${DB_NAME}"
 
-su -l postgres -c "psql" << EOF
+su -u postgres -c "psql" << EOF
 
 DROP DATABASE IF EXISTS $DB_NAME;
 DROP USER IF EXISTS $USER;
