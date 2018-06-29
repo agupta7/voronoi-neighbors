@@ -7,14 +7,23 @@ The front end is packaged as a Node.js Webpack application.  Thus, the first thi
 	src
 	|---webpack-entry.js
 	|---index.html
-   |---ngapp
-   |---|---ngappmodule.js
-   |---|---ngroute-definitions.js
+	|---ngapp
+	|---|---ngappmodule.js
+	|---|---ngroute-definitions.js
+
+
+## Quickstart
+
+ 1. Make sure you ran `npm install` after changing to `frontend` directory to install NodeJS dependencies.
+ 2. Execute `npm run start` to build and serve the front-end assets.
+ 3. Refer to `backend/README.md` to see how to start back-end.
 
 ## `package.json`
 This file describes the Node.js package.  Most NPM commands you run will refer to this file.  For example, running `npm install` will install all packages listed in the package.json-\>`devDependencies` and package.json-\>`dependencies` arrays.
+
 After installing, run `npm run build` to convert the source code into a deployable static website written to the `frontend/dist` folder.  This deployable code can then be copied to Apache's /var/www directory.  Alternatively, you can run `npm start` to build the code and start a temporary web server on port 8080.
-You can adjust the ports in the JSON object package.json-\>`ports`.
+
+See the package.json-\>`scripts` object for all the npm scripts defined.  You can adjust the ports in the JSON object package.json-\>`ports`.
 
 ## `webpack.config.js`
 This file describes the Webpack configuration. Please refer to the comments in the file. 
