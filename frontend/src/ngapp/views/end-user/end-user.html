@@ -1,5 +1,14 @@
 <div ng-init="zoom=16" class="container">
 	<h1>End-user View</h1>
+	<p>
+		This view illustrates what an end-user application might do when it runs a k-nearest neighbor query.  It is not meant to be the application itself - most of these steps would happen in the background in a real application.
+	</p>
+	<p>
+		First, select an origin point for the nearest neighbor query.  Then, you can select a value for "k" for how many neighbors you want and/or a value for range in meters,
+		the farthest line-of-sight distance a point can be from the selected origin.  If you specify both parameters, both conditions will be applied with a logical AND.
+		If you leave both parameters blank, this will return all points from the database.  No matter which query combination you choose, signature and geometric verification will be
+		performed to validate the result set.
+	</p>
 	<div class="row">
 		<div class="column">
 			<div style="display:flex;">
@@ -20,7 +29,7 @@
 					The first step in verifying results involves doing a signature check.  The results from the service provider contain, for each record, some verification data (called a verification object) that is cryptographically signed by the data owner.
 					The end-user's app contains the embedded public key necessary to verify this signature.
 					The signature verification step is common across all query types and ensures that the service provider did not modify the contents of any of the records returned.
-					This is a necessary but insufficient check for ensuring that the service provider is processing queries faithfully.  Notably, signature verification does not detect maliciously added or removed records.
+					This is a necessary but insufficient check for ensuring that the service provider is processing queries faithfully.  Notably, signature verification does not detect maliciously dropped records.
 				</p>
 				<h2>Geometric verification<span ng-show="geometricVerification === true" style="color: green;"> - Passed</span><span style="color: red;" ng-show="geometricVerification === false"> - <a href="/service-provider" style="color: red; text-decoration: underline;">Failed</a></span></h2>
 				<p style="margin-top: -1rem; text-align: justify;">

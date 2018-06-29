@@ -1,9 +1,16 @@
 <div class="container">
 	<h1>Service Provider View</h1>
-	<section>
+	<p>
+		This page lets you view and manipulate the location data way a service provider would.  It is not a raw dump of the database table, however.
+		When submitting changes, this view can attempt to re-calculate the Voronoi neighborhood and re-sign the verification object.
+		The idea is that manipulating the raw data might be very difficult for a human to do, but it is best not to rely on security through obscurity.
+		Instead, we assume that a malicious provider knows the algorithm that generates the Voronoi neighborhood and verification objects.
+	</p>
+	<fieldset style="border-width: 2px; padding: 1rem; max-width: 80rem;">
+		<legend>Malicious behavior settings</legend>
 		<label><input type="checkbox" ng-model="dropRecordsRandom" ng-change="$ctrl.dropRecordsRandomChanged(dropRecordsRandom)">Randomly drop points from results</label>
 		<label><input type="checkbox" ng-model="modifyRecordsRandom" ng-change="$ctrl.modifyRecordsRandomChanged(modifyRecordsRandom)">Randomly return wrong points as k-nearest neighbors</label>
-	</section>
+	</fieldset>
 	<table id="pois">
 		<thead>
 			<th>Coordinates (WGS 84 latitude / longitude in degrees)</th>

@@ -1,13 +1,26 @@
 <div>
 	<h1>Spatial Query Integrity with Voronoi Neighbors Demo</h1>
-	<p>Welcome, this website will illustrate a proof of concept of the algorithm outlined in Dr. Ku's paper, <a target="_blank" href="http://ieeexplore.ieee.org/abstract/document/6109262/"><i>Spatial Query Integrity with Voronoi Neighbors</i></a>.</p>
-	<p>Cloud computing has become very common in today's industry because it's often time much cheaper to let a third-party maintain your infrastructure.  Clients get benefits of economies of scale as well as having the ability to quickly acquire more virtual machines according to their applications' needs. ...</p>
-	<p>
-		There are three stake-holders:
-		<ul>
-			<li>The <a href="/data-owner">data owner / data collector</a></li>
-			<li>The <a href="/service-provider">service provider</a> or cloud owner</li>
-			<li>The <a href="/end-user">end-user</a></li>
+	<p>Welcome, this website will illustrate a proof of concept of the algorithm outlined in the paper <a target="_blank" href="http://ieeexplore.ieee.org/abstract/document/6109262/"><i>Spatial Query Integrity with Voronoi Neighbors</i></a> by Dr. Ling Hu, Dr. Wei-Shinn Ku, Dr. Spiridon Bakiras, and Dr. Cyrus Shahabi.</p>
+	<p>Cloud computing has become very common in today's industry because it's often time much cheaper to let a third-party maintain your infrastructure.  Clients get benefits of economies of scale as well as having the ability to quickly acquire more virtual machines according to their applications' needs.
+		This demo interactively explores the main ideas of the paper by presenting the points of view of three different stake holders: a data collector, a location database service provider, and the end-user application.
 		</ul>
+		In a real-world solution, these three tabs would be deployed as three separate applications.  For a proof of concept, however, it's convenient to have them in one place.
+	</p>
+	<p>
+		The data collector is anybody who collects location data.  For example, suppose a data collector wants to launch a new app that advises users
+		about electric car charging stations nearby.
+		If the app becomes popular, such the data owner may need to be able answer hundreds or thousands of queries per second like, "What's the nearest charging station to a particular location?"
+		This is a quintessential example of a k-nearest neighbor query, where k in this example is one.
+		Instead of diverting the seed capital to building out a back-end infrastructure capable of handling such queries, the data owner could use a cloud service provider
+		that can ingest location data from the collector and expose an API that answers location based queries like k-nearest neighbor.
+	</p>
+	<p>
+		The paper and this demo show a framework in which the data owner can host the location data at a third-party provider and
+		have proof in the results of location queries that the results were not modified in any way.  The demo workflow has three steps:
+		<ol style="padding-left: 4rem;">
+			<li>Add location data in the <a href="/data-owner">data owner / data collector</a> tab.</li>
+			<li>View and optionally modify the data on the <a href="/service-provider">service provider</a> tab.</li>
+			<li>Run k-nearest neighbor queries and verification of results on the <a href="/end-user">end-user view</a> tab.</li>
+		</ol>
 	</p>
 </div>

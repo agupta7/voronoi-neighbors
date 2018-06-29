@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="column" style="max-width: 85rem;">
 					<textarea style="max-width: 85rem; height: 25rem;" ng-model-options="{debounce: 150}" ng-model="keypair.private" rsa-key ng-change="keypair.public = $ctrl.generateMatchingKey(keypair.private)" placeholder="Enter private key as hex string"></textarea>
-					<div style="text-align: right; margin-top: -2rem;"><button ng-click="keypair = $ctrl.crypto.generateKeys();" type="button">Generate private key</button></div>
+					<div style="text-align: right; margin-top: -1rem;"><button ng-click="keypair = $ctrl.crypto.generateKeys();" type="button">Generate private key</button></div>
 				</div>
 			</div>
 			<div class="row">
