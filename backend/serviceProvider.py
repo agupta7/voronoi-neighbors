@@ -2,7 +2,7 @@ import shapely.wkt
 from shapely.geometry.point import Point
 import struct
 
-def maliciousUploadData(connection, diff):
+def maliciousUploadData(diff, connection):
     cursor = connection.cursor()
     records = diff['changed']
     for record in records:
