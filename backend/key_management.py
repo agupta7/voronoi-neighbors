@@ -8,10 +8,16 @@ def savePublicKey(source, publicKeyPemStr, connection):
     connection.commit()
     cursor.close()
 
+    return 'pass'
+
 def getPublicKey(source, connection):
     query = '''SELECT key, time_utc FROM keystore WHERE source = %s ORDER BY time_utc DESC'''
     cursor = connection.cursor()
     cursor.execute(query, (source,))
     record = cursor.fetchone()
+    if record is None:
+        record = (None, None)
 
+    connection.commit()
+    cursor.close()
     return record

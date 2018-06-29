@@ -89,7 +89,7 @@ def saveSettings(settings, connection):
 
 def getSettings(connection):
     cursor = connection.cursor()
-    result = dict()
+    result = dict(dropRecordsRandom=False, modifyRecordsRandom=False)
 
     sql = '''SELECT s.key, s.value FROM settings s WHERE s.key in ('dropRecordsRandom', 'modifyRecordsRandom')'''
     cursor.execute(sql)
