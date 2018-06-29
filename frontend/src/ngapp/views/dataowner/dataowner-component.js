@@ -82,7 +82,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./dataowner.html'),
+		template: require('!raw-loader!./dataowner.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

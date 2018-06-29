@@ -54,7 +54,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./service-provider.html'),
+		template: require('!raw-loader!./service-provider.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		bindings: {

@@ -56,7 +56,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./end-user.html'),
+		template: require('!raw-loader!./end-user.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {

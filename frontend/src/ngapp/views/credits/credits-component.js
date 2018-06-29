@@ -8,7 +8,7 @@ var def = {
 	}],
 	controllerName: COMPONENT_NAME + 'Controller',
 	componentDdo: {
-		templateUrl: require('./credits.html'),
+		template: require('!raw-loader!./credits.html'),
 		controller: COMPONENT_NAME + 'Controller',
 		controllerAs: '$ctrl',
 		scope: {
