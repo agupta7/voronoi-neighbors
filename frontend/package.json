@@ -14,7 +14,8 @@
     "servedebug": "nodejs express-spa.js debug",
     "serveprod": "nodejs express-spa.js dist",
     "watch": "webpack --watch --progress --verbose --env.debug",
-    "buildonly": "webpack --bail --progress --profile --env.production"
+    "buildonly": "webpack --bail --progress --profile --env.production",
+	 "test": "jasmine --config=tests/support/jasmine.json"
   },
   "ports": {
     "dev": 8888,
@@ -48,6 +49,7 @@
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.29.0",
     "imports-loader": "^0.8.0",
+    "jasmine": "^3.1.0",
     "npm-run-all": "^4.0.2",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.18.2",
