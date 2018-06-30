@@ -11,6 +11,32 @@ ngapp._service(SERVICE_NAME, dataService);
 function dataService($http, $location, API_URL_BASE, crypto, util) {
 	var service = this;
 
+	/**
+	 * Gets all points from the server
+	 * 
+	 * @returns $q promise which resolves to an array of points:
+				[{
+					"location": {
+						"lat": float,
+						"lnt": float
+					},
+					"tail": {
+						"name": string,
+						"phone": string,
+						"address": string
+					},
+					"_meta_": {
+						"id": number,
+						"neighbors": [{
+							"location": {
+									"lat": float,
+									"lng": float
+							}
+						}...],
+						"verificationObject": hex string
+					}
+            }...]
+	 */
 	service.getPoints = function getPoints() {
 		return $http.get(API_URL_BASE + '/pois').then(dataGetter).then(function (points) {
 			return points.map(function serviceToViewPoint(point) {
@@ -22,6 +48,11 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 			});
 		});
 	};
+
+	/**
+	 * Gets the list of hardcoded points to quickly load into the server.
+	 * @returns JSON array of points
+	 */
 	service.getHardcoded = function getHardcoded() {
 		return ng.copy(POINTS).map(function (point) {
 			point.lat = point.location.lat;
@@ -30,6 +61,35 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 			return point;
 		});
 	};
+	/**
+	 * Sends points off to the server from the dataowner.
+	 * These points replace all points in the server.
+	 * 
+	 * @param {*} newpoints Array of points:
+				[{
+					"location": {
+						"lat": float,
+						"lnt": float
+					},
+					"tail": {
+						"name": string,
+						"phone": string,
+						"address": string
+					},
+					"_meta_": {
+						"id": number,
+						"neighbors": [{
+							"location": {
+									"lat": float,
+									"lng": float
+							}
+						}...],
+						"verificationObject": hex string
+					}
+            }...]
+	 * @param {*} oldpoints Reserved for future.  Pass null for now.
+	 * @param {*} privateRsaKey RSAKey object that represents the private key from jsrsasign
+	 */
 	service.sendPoints = function sendPoints(newpoints, oldpoints, privateRsaKey) {
 		var points = newpoints.map(function (point) {
 			return {
@@ -43,6 +103,21 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		});
 		return $http.post(API_URL_BASE + '/updatePois', attachPoiMetadata(points, privateRsaKey));
 	};
+	/**
+	 * Used to send malicious changes from the service provider tab.
+	 * 
+	 * @param {*} diff object with two keys 'changed' and 'deleted':
+			{
+				"changed": [points...],
+				"deleted": [{
+					"_meta_": {
+						"id": number
+					}
+				}]
+			}
+	 * @param {*} privateRsaKey privateRsaKey RSAKey object that represents the private key from jsrsasign
+	 * @returns $q promise
+	 */
 	service.sendMaliciousChanges = function sendMaliciousChanges(diff, privateRsaKey) {
 		diff = diff || {};
 		diff.changed = diff.changed || [];
@@ -52,6 +127,40 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		return $http.post(API_URL_BASE + '/malicious/changes', diff);
 	};
 
+	/**
+	 * Gets the nearest neighbors in the database as claimed by the server.
+	 * Note that the server may be acting malicious so the results have to checked with the verifier service.
+	 * 
+	 * @param {*} originPoint object with keys "lat" and "lng":
+				{
+					"lat": float,
+					"lng:": float
+				}
+	 * @param {*} k Optional parameter
+	 * @param {*} range Optional range in meters
+	 * @returns $q promise that resolves to array of points:
+				[{
+					"location": {
+						"lat": float,
+						"lnt": float
+					},
+					"tail": {
+						"name": string,
+						"phone": string,
+						"address": string
+					},
+					"_meta_": {
+						"id": number,
+						"neighbors": [{
+							"location": {
+									"lat": float,
+									"lng": float
+							}
+						}...],
+						"verificationObject": hex string
+					}
+            }...]
+	 */
 	service.nearestNeighbors = function nearestNeighbors(originPoint, k, range) {
 		return $http.get(API_URL_BASE + "/nearestNeighbors", {
 			'params': {
@@ -69,6 +178,12 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		});
 	};
 
+	/**
+	 * Saves the public key of the data owner.  This is used on the end-user tab to verify the verification object signatures.
+	 * @param {*} source String There for multiple signers but for now it should say "dataowner"
+	 * @param {*} publicKey RSAKey public key object from the jsrsasign library.  Can use crypto service to get this.
+	 * @returns $q promise
+	 */
 	service.savePublicKey = function savePublicKey(source, publicKey) {
 		return $http.post(API_URL_BASE + '/publicKey', {
 			'source': source,
@@ -76,6 +191,11 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		}).then(dataGetter);
 	};
 
+	/**
+	 * Gets the public key of the data owner for verification on the end-user tab.
+	 * @param {*} source String that should say "dataowner" for now.
+	 * @returns $q promise that resolves to the public key string in PKCS#8/SubjectPublicKeyInfo format 
+	 */
 	service.getPublicKey = function getPublicKey(source) {
 		return $http.get(API_URL_BASE + '/publicKey', {
 			'params': {
@@ -84,6 +204,11 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 		}).then(dataGetter);
 	};
 
+	/**
+	 * Add _meta_ data to the points.  This includes Voronoi neighbors and the verification object if private key is included.
+	 * @param {*} points Array of points
+	 * @param {*} privateRsaKey RSAKey private key object from jsrsasign.  Use crypto service to generate this.
+	 */
 	function attachPoiMetadata(points, privateRsaKey) {
 		points = points.map(function (point) {
 			point['_meta_'] = ng.extend(point['_meta_'] || {}, {

@@ -5,7 +5,6 @@ import ngapp from '../ngappmodule.js';
 const SERVICE_NAME = 'crypto';
 	
 var serviceFactory = [util.toString(), function (util) {
-	// assert(KJUR.crypto.MessageDigest == MessageDigest);
 	var service = this;
 
 	service.hash = function hashSHA256(str) {
