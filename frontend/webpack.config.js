@@ -39,12 +39,12 @@ module.exports = function (env) { // webpack will invoke the exported function w
 		*/
 		var config = {
 			entry: {
-				app: './src/webpack-entry.js'
+				app: isTest ? './test/webpack-testBuild.js' : './src/webpack-entry.js'
 			},
 			output: {
 				filename: isProd ? '[name].[hash].min.js' : '[name].bundle.js',
 				chunkFilename: '[id].[name].[hash].js', // filename output pattern for bundle-loader [name] is the name query parameter
-				path: __dirname + (isProd ? '/dist' : '/debug'),
+				path: __dirname + '/.bin' + (isProd ? '/dist' : (isTest ? '/testBuild' : '/debug')),
 				publicPath: ''
 			},
 			module: {
@@ -127,6 +127,13 @@ module.exports = function (env) { // webpack will invoke the exported function w
 		} else { // end if (!isTest)
 			// Silence the css loader to not do CSS processing for a test build
 			config.module.rules[1].use = 'null-loader';
+			config.plugins.push(
+				new HtmlWebpackPlugin({
+					template: './test/testBuild.html',
+					filename: 'index.html',
+					inject: 'body'
+				})
+			);
 			
 			/**
 			* Entry
@@ -134,7 +141,7 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			* Should be an empty object if it's generating a test build
 			* Karma will set this when it's a test build
 			*/
-			config.entry = 0;
+			//config.entry = 0;
 		}
 		
 		if (isProd) {

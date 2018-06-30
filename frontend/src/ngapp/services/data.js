@@ -2,6 +2,7 @@ import ng from 'angular';
 import ngapp from '../ngappmodule.js';
 import crypto from './crypto.js';
 import util from './util.js';
+import voronoiDiagram from '../../voronoi-util/voronoi.js';
 
 const SERVICE_NAME = 'data';
 
@@ -97,7 +98,6 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 					'lat': point.lat,
 					'lng': point.lng
 				},
-				'neighbors': point.neighbors || [],
 				'tail': point.tail
 			};
 		});
@@ -210,18 +210,24 @@ function dataService($http, $location, API_URL_BASE, crypto, util) {
 	 * @param {*} privateRsaKey RSAKey private key object from jsrsasign.  Use crypto service to generate this.
 	 */
 	function attachPoiMetadata(points, privateRsaKey) {
-		points = points.map(function (point) {
+		var vordiag = voronoiDiagram(points.map(function (point) {
+			return {
+				'lat': point.location.lat,
+				'lng': point.location.lng
+			};
+		}));
+		points = points.map(function (point, index) {
+			var neighborCells = vordiag.cells[index].getNeighbors();
 			point['_meta_'] = ng.extend(point['_meta_'] || {}, {
-				'neighbors': (point.neighbors || []).map(function (neighbor) {
+				'neighbors': neighborCells.map(function (neighborCell) {
 					return {
 						'location': {
-							'lat': neighbor.lat || neighbor.location.lat,
-							'lng': neighbor.lng || neighbor.location.lng
+							'lat': points[neighborCell.index].location.lat,
+							'lng': points[neighborCell.index].location.lng
 						}
 					};
 				})
 			});
-			delete point['neighbors'];
 			
 			return point;
 		});

@@ -12,6 +12,8 @@ var rsaKeyDdoFactory = [crypto.toString(), function (crypto) {
 				$ngModelController.$parsers.push(function rsaKeyParser(text) {
 					if (text) {
 						var keyObj = crypto.readPEM(text);
+						if (!keyObj)
+							return undefined;
 						if (rsaTextCanonicalForm(keyObj.toString()) != rsaTextCanonicalForm(text)) {
 							if (rsaTextCanonicalForm(crypto.keyToPEM(keyObj, 'PKCS1PRV')) != rsaTextCanonicalForm(text))
 								return undefined;

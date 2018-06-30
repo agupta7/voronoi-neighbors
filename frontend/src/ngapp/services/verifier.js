@@ -125,7 +125,7 @@ var serviceFactory = [crypto.toString(), util.toString(), function (crypto, util
 		var neighbors = point['_meta_'].neighbors;
 		var neighborsLengthBytes = Array.from(util.numToBytes(neighbors.length));
 		if (neighborsLengthBytes.length < 2)
-		neighborsLengthBytes.unshift(0);
+			neighborsLengthBytes.unshift(0);
 		verificationBytes.push.apply(verificationBytes, neighborsLengthBytes);
 		for (var j = 0; j < neighbors.length; j++) {
 			var n = neighbors[j];

@@ -11,6 +11,9 @@ const NG_APP_NAME = 'voronoi';
  *	Check out ngroute-definitions for the wiring that makes the pages work.
  */
 var ngappmodule = ng.module(NG_APP_NAME, [ngroute, gmapsApi, 'ngDialog']);
+ngappmodule.toString = function toString() {
+	return NG_APP_NAME;
+};
 
 ngappmodule.config(["$locationProvider", function ($locationProvider) {
 	$locationProvider.html5Mode(true);
