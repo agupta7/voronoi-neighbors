@@ -6,9 +6,7 @@ environment\ setup/pythonenv
 
 # npm
 node_modules
-dist
-debug
-testBuild
+.bin/
 
 # python
 *.pyc
