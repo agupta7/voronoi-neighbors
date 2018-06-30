@@ -97,7 +97,7 @@ var serviceFactory = [util.toString(), function (util) {
 		if (/-----BEGIN\s+(RSA\s+)?PUBLIC\s+KEY/i.test(pemKeyString)) {
 			// https://holtstrom.com/michael/tools/asn1decoder.php
 			// https://gist.github.com/awood/9338235
-			var encodedDERHex = util.bytesToHexString(util.stringToBytes(atob(split.join(''))));
+			var encodedDERHex = util.bytesToHexString(util.base64ToBytes(split.join('')));
 			if (/-----BEGIN\s+RSA\s+PUBLIC/i.test(pemKeyString))
 				//-----BEGIN RSA PUBLIC KEY-----
 				k.readPKCS5PubKeyHex(encodedDERHex);

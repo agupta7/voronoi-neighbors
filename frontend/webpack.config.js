@@ -39,12 +39,12 @@ module.exports = function (env) { // webpack will invoke the exported function w
 		*/
 		var config = {
 			entry: {
-				app: isTest ? './test/webpack-entry.js' : './src/webpack-entry.js'
+				app: isTest ? './test/webpack-testBuild.js' : './src/webpack-entry.js'
 			},
 			output: {
 				filename: isProd ? '[name].[hash].min.js' : '[name].bundle.js',
 				chunkFilename: '[id].[name].[hash].js', // filename output pattern for bundle-loader [name] is the name query parameter
-				path: __dirname + (isProd ? '/dist' : (isTest ? '/testBuild' : '/debug')),
+				path: __dirname + '/.bin' + (isProd ? '/dist' : (isTest ? '/testBuild' : '/debug')),
 				publicPath: ''
 			},
 			module: {
@@ -129,7 +129,7 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			config.module.rules[1].use = 'null-loader';
 			config.plugins.push(
 				new HtmlWebpackPlugin({
-					template: './test/index.html',
+					template: './test/testBuild.html',
 					filename: 'index.html',
 					inject: 'body'
 				})

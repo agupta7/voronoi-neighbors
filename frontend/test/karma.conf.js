@@ -1,5 +1,4 @@
-// Karma configuration
-// Generated on Sat Jun 30 2018 08:37:45 GMT-0500 (CDT)
+var BROWSERS = ['Firefox'];
 
 module.exports = function(config) {
   config.set({
@@ -11,11 +10,18 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
+	 client: {
+		 jasmine: {
+			 random: false,
+			 stopOnFailure: false,
+			 failFast: false
+		 }
+	 },
 
 
     // list of files / patterns to load in the browser
     files: [
-      'testBuild/app*.js'
+      '../.bin/testBuild/app*.js'
     ],
 
 
@@ -33,7 +39,15 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['spec'],
+    specReporter: {
+      maxLogLines: 5,         // limit number of lines logged per test
+      suppressErrorSummary: true,  // do not print error summary
+      suppressFailed: false,  // do not print information about failed tests
+      suppressPassed: false,  // do not print information about passed tests
+      suppressSkipped: true,  // do not print information about skipped tests
+      showSpecTiming: false // print the time elapsed for each spec
+    },
 
 
     // web server port
@@ -55,7 +69,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox'],
+    browsers: BROWSERS,
 
 
     // Continuous Integration mode
