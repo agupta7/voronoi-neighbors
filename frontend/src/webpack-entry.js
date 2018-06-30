@@ -12,7 +12,6 @@ import 'milligram';
 import './styles/app.css';
 import 'ng-dialog/css/ngDialog.css';
 import 'ng-dialog/css/ngDialog-theme-default.css';
-//import './styles/main.css';
 
 import ngapp from './ngapp/ngappmodule.js';
 
@@ -42,4 +41,4 @@ import latlngFilter from './ngapp/services/latlngFilter.js';
  * import crypto from './ngapp/services/crypto.js';
  */
 
-//
+export default ngapp
