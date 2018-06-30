@@ -14,7 +14,12 @@ function voronoiDiagram(latLngPoints) {
 		return CartesianPoint.fromLatLng(latlng).normalize();
 	});
 
-	var delaunayTriangles = delaunayTriangulation(cartesiansNormalized);
+	var delaunayTriangles = delaunayTriangulation(cartesiansNormalized, function distanceFormula(ptA, ptB) {
+		var cartA = new CartesianPoint(ptA);
+		var cartB = new CartesianPoint(ptB);
+
+		return cartA.distanceTo(cartB);
+	});
 	delaunayTriangles.vor_positions_cp = delaunayTriangles.vor_positions.map(function (vor_point) {
 		var cp = new CartesianPoint(vor_point);
 		cp['neighborCells'] = [];

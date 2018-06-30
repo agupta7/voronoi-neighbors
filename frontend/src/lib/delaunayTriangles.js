@@ -1487,11 +1487,17 @@ function FindDelaunayTriangulationIndexed(Positions, Indices)
 	return TriSet;
 }
 
-function FindDelaunayTriangulation(Positions)
+function FindDelaunayTriangulation(Positions, distanceFormula)
 {
 	var Indices = new Array(Positions.length);
 	for (var i=0; i<Indices.length; i++)
 		Indices[i] = i;
+	if (typeof distanceFormula === "function")
+	ptdist = function (ptA, ptB) {
+		var dist1 = distanceFormula(ptA, ptB);
+		var dist2 = Math.sqrt(Math.pow(ptA[0] + ptB[0], 2) + Math.pow(ptA[1] + ptB[1], 2) + Math.pow(ptA[2] + ptB[2], 2));
+		return dist1 - dist2;
+	};
 	
 	return FindDelaunayTriangulationIndexed(Positions, Indices); 
 }
