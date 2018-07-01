@@ -18,6 +18,9 @@ The front end is packaged as a Node.js Webpack application.  Thus, the first thi
  2. Execute `npm run start` to build and serve the front-end assets.
  3. Refer to `backend/README.md` to see how to start back-end.
 
+## Test
+Execute `npm run test` to execute automated test cases.  You may have to change the browser to one installed on your system in the file `frontend/test/karma.conf.js`.
+
 ## `package.json`
 This file describes the Node.js package.  Most NPM commands you run will refer to this file.  For example, running `npm install` will install all packages listed in the package.json-\>`devDependencies` and package.json-\>`dependencies` arrays.
 
