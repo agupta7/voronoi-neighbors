@@ -21,9 +21,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../.bin/testBuild/app*.js'
+		 '../.bin/dist/app*.js',
+		 '../node_modules/angular-mocks/angular-mocks.js',
+		 './**/*Spec.js'
     ],
-
+    webpack: (function () {
+		 var webpack_config = require('../webpack.config.js');
+		 webpack_config.entry = 0;
+	 }()),
+	 webpackMiddleware: {
+	 },
 
     // list of files / patterns to exclude
     exclude: [
@@ -33,6 +40,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+		 './**/*Spec.js': ['webpack']
     },
 
 

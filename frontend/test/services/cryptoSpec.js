@@ -1,4 +1,3 @@
-require('angular-mocks/ngMock');
 var NAMES = require('../NAMES.js');
 var testUtil = require('../testUtil.js');
 
