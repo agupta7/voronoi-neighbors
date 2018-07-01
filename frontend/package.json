@@ -6,7 +6,7 @@
   "main": "express-spa.js",
   "scripts": {
     "start": "npm-run-all clean build serveprod",
-    "test": "npm-run-all clean buildDebug karma",
+    "test": "npm-run-all buildDebug karma",
     "build": "webpack --bail --progress --profile --env.production",
     "karma": "karma start test/karma.conf.js",
     "debug": "npm-run-all --parallel watch servedebug",
