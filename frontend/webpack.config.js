@@ -6,7 +6,6 @@
 
 module.exports = function (env) { // webpack will invoke the exported function with env as the first argument with the properties you pass using --env.propkey='value' from the commandline
 	'use strict';
-	env = env || {}; // webpack-dev-server will not pass in any object
 
 	// Modules
 	var webpack = require('webpack');
@@ -24,6 +23,8 @@ module.exports = function (env) { // webpack will invoke the exported function w
 	 * ex: npm run-script build  : ENV === 'build'
 	 */
 	var ENV = process.env.npm_lifecycle_event; // 
+	var isDev = !env;
+	env = env || {}; // webpack-dev-server will not pass in any object
 	var isTest = env.test == true;
 	var isProd = env.production == true;
 	var isDebug = env.debug == true;
@@ -43,7 +44,7 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			},
 			output: {
 				filename: isProd ? '[name].[hash].min.js' : '[name].bundle.js',
-				chunkFilename: '[id].[name].[hash].js', // filename output pattern for bundle-loader [name] is the name query parameter
+				chunkFilename: isProd ? '[id].[name].[hash].js' : '[name].bundle.js', // filename output pattern for bundle-loader [name] is the name query parameter
 				path: __dirname + '/.bin' + (isProd ? '/dist' : (isTest ? '/testBuild' : '/debug')),
 				publicPath: ''
 			},
@@ -52,7 +53,7 @@ module.exports = function (env) { // webpack will invoke the exported function w
 			},
 			plugins: [
 				new webpack.DefinePlugin({
-					'__WEBPACK__API_URL_BASE': JSON.stringify((isDebug || isProd) ? '/api' : ('//localhost:' + package_json['ports']['backend'])),
+					'__WEBPACK__API_URL_BASE': JSON.stringify('/api'),
 					'__WEBPACK__PACKAGE_VERSION': JSON.stringify(package_json.version),
 					'__WEBPACK__AUTHOR': JSON.stringify(package_json.author),
 					'__WEBPACK__APP_REPOSITORY': JSON.stringify(package_json.homepage)
@@ -61,12 +62,18 @@ module.exports = function (env) { // webpack will invoke the exported function w
 					from: __dirname + '/src/webpack.copy'
 				}])
 			],
-			devtool: !disableSourceMap ? (isDebug || isProd ? 'source-map' : 'inline-source-map') : '',
+			devtool: !disableSourceMap ? (isDev ? 'inline-source-map' : 'source-map') : '',
 			devServer: {
 				host: '0.0.0.0', // comment this out to listen on only localhost
 				disableHostCheck: true, // comment this out to force localhost serving
 				contentBase: 'dist/',
-				port: package_json.ports.dev
+				port: package_json.ports.dev,
+				proxy: {
+					'/api': {
+						target: 'http://localhost:' + package_json.ports.backend,
+						pathRewrite: {'^/api': ''}
+					}
+				}
 			}
 		};
 
